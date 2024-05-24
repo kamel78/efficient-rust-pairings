@@ -1,7 +1,7 @@
 # rust-pairings
 Pairings-based cryptography with rust: a constant-time and efficient implementation with rust for BLS12, BLS24 and BLS48 curves. 
 
-The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves. According to the standardization draft at [1], BLS curves are the most suitable for pairings-based cryptography due to several optimization and security benefits. We have implemented a more optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to G2 is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both G1 and G2 sub-groups. Detailed information is provided below.
+The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves. According to the standardization draft at [1](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairings-based cryptography due to several optimization and security benefits. We have implemented a more optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to G2 is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both G1 and G2 sub-groups. Detailed information is provided below.
 
 ## Implemented Curves
 
@@ -20,10 +20,10 @@ The field GF(p) is defined by the prime p = 1/3 (x - 1)²(x⁴ - x² + 1) + x. T
 
 Two different sets of parameters for BLS12 are implemented:
 
-- **BLS12-381**: Widely considered the standard for the 128-bit security level and extensively used by most existing libraries and implementations of pairing-based cryptography. However, recent attacks [reference] suggest that it does not truly provide 128-bit security.
+- **BLS12-381**: Widely considered the standard for the 128-bit security level and extensively used by most existing libraries and implementations of pairing-based cryptography. However, recent attacks [3](https://eprint.iacr.org/2017/334.pdf) suggest that it does not truly provide 128-bit security.
 - **BLS12-461**: Recommended for a guaranteed 128-bit security level.
 
-For further details and discussions, refer to [2].
+For further details and discussions, refer to [2](https://github.com/zcash/zcash/issues/4065).
 
 #### Parameters of the BLS12-381 (M-Type):
 
@@ -94,11 +94,11 @@ BLS48 curves are implemented based on the following Fp48 tower construction:
 
 The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x¹⁶-x⁸+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x¹⁶ - x⁸ + 1`, for a given x defined as a parameter of the curve.
 
-The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Only one set of parameters for the BLS48 is implemented, namely the BLS12-575. This is a curve we discovered using exhaustive parameters set with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the normalization draft [xx] does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
+The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Only one set of parameters for the BLS48 is implemented, namely the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [1](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
 
-#### Parameters of the BLS24-575 (M-Type):
+#### Parameters of the BLS48-575 (M-Type):
 
-- **x** = `- 0xff800801`
+- **x** = `-0xff800801`
 - **p** = `0x526222098be0d6809ec22a43ab79d1f2120ecbcfbab8934e6c19b1b30a442eea74c92f3ed3940030dbe05f531cd41c69464c793821806366ec094551c2828e22d811dcc31beb02ab`
 - **r** = `0xf81e36cde28fad72337ee7497988c7a518b481d35f9cca5a5cbb9c453c85b3ef09f470219adad65475809e468f2faa5490a999c9525ef3f601cd211813004001`
 - **b** = `1`
@@ -112,17 +112,30 @@ For a full description of all related parameters, see the file (`pairings/parame
 
 In order to avoid several side-channel attacks, a constant-time implementation of almost all operations is provided, especially for:
 
-1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**: This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in `pairings/parameters/paramlist.rs`).
+1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[4](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in `pairings/parameters/paramlist.rs`). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
 
 2. **GLV-multiplication for Torsion Points on G1**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to G1.
 
-3. **GLS-multiplication on G2**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [https://eprint.iacr.org/2013/458.pdf](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from G2 on BLS12, BLS24, and BLS48.
+3. **GLS-multiplication on G2**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [5](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from G2 on BLS12, BLS24, and BLS48.
 
-4. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group G2 is decomposed using the method from [https://ia.cr/2017/419](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
+4. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group G2 is decomposed using the method from [6](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
 
 5. **Constant-time Multiplication for Points from E(Fp2), E(Fp4), and E(Fp8)**: Using w-sized sliding window, a fast and stable approach is used as a replacement for the "Montgomery-Ladder" one.
 
-6. **Scalar's Recoding**: Implemented separately in a constant-time way for all implemented multiplications on all curves. (see `pairings/tools/recoders.rs` for implementation details).
+6. **Scalar's Recoding**: Implemented separately in a constant-time way for all involved scalar multiplications, on all curve's sub-groups. (see `pairings/tools/recoders.rs` for implementation details).
 
 
 
+## References 
+
+[1] . [Pairing-Friendly Curves : draft-irtf-cfrg-pairing-friendly-curves-11.](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/)
+
+[2] . [Why not BLS12-461 with equivalent performance?](https://github.com/zcash/zcash/issues/4065) 
+
+[3] . [Updating key size estimations for pairings](https://eprint.iacr.org/2017/334.pdf)
+
+[4] . [Simplified Shallue-van de Woestijne-Ulas Method](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3)
+
+[5] . [Efficient hash maps to G2 on BLS curves](https://eprint.iacr.org/2013/458.pdf) 
+
+[6] . [Exponentiating in Pairing Groups](https://ia.cr/2017/419)
