@@ -179,7 +179,7 @@ This code snippet demonstrates the simplicity and efficiency of the library's us
     <tr>
       <th>BLS12-381</th>
       <td align="center">1.65 ms</td>
-      <td align="center">680.85 µs</td>
+      <td align="center"><font color="red">680.85 µs</td>
       <td align="center">958.08 µs</td>
       <td align="center">206.83 µs</td>
       <td align="center">481.27 µs</td>
@@ -228,6 +228,7 @@ This code snippet demonstrates the simplicity and efficiency of the library's us
     </tr>
   </tbody>
 </table>
+
 ## References 
 
 [1] . [Pairing-Friendly Curves : draft-irtf-cfrg-pairing-friendly-curves-11.](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/)
