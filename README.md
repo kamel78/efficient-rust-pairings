@@ -116,7 +116,7 @@ In order to avoid several side-channel attacks, a constant-time implementation o
 
 1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in `pairings/parameters/paramlist.rs`). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
 
-To explore alternative addition methods, we implemented a new mapping scheme proposed by Dmitry Khovratovich in [12] for performing hashing to G1 on BLS curves. We optimized the proposed algorithm and managed to produce a constant-time version. However, the implementation is only valid for the BLS12-361 curve since it is conditioned by (p mod 9 = 4) and (p mod 27 = 1) (a condition not met by all other implemented curves). Additionally, the obtained performance is not very interesting compared to SWU, particularly due to the required long exponentiation.
+    To explore alternative addition methods, we implemented a new mapping scheme proposed by Dmitry Khovratovich in [12](https://link.springer.com/article/10.1007/s10623-022-01012-8) for performing hashing to G1 on BLS curves. We optimized the proposed algorithm and managed to produce a constant-time version. However, the implementation is only valid for the BLS12-361 curve since it is conditioned by (p mod 9 = 4) and (p mod 27 = 1) (a condition not met by all other implemented curves). Additionally, the obtained performance is not very interesting compared to SWU, particularly due to the required long exponentiation.
 
 3. **GLV-multiplication for Torsion Points on G1**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to G1.
 
@@ -165,7 +165,7 @@ This code snippet demonstrates the simplicity and efficiency of the library's us
 
 ### Performance and Runtime Results
 
-The following table illustrates the obtained performances and runtime results for various implemented operations across all curves. The tests were performed on an Intel Core i7-10700F CPU running at 2.9 GHz, with 16 GB of RAM. Some operations have timing measurements in microseconds (µs) as they take less than one millisecond.
+The following table illustrates the obtained performances and runtime results for various implemented operations across all curves. The tests were performed on an Intel Core i7-10700F CPU running at 2.9 GHz, with 16 GB of RAM. Some operations have timing measurements in microseconds (µs) as they take less than one millisecond. Note that for the 256-bit security level (provided by the BLS48 curve), the obtained results are significantly better than the existing ones presented [here](https://github.com/mk-math-kyushu/bls48/blob/master/README.md) using a C++ implementation of BLS48, when using a similar performance architecture.
 
 <table>
   <thead>
@@ -257,3 +257,5 @@ The following table illustrates the obtained performances and runtime results fo
 [10] . [Faster big-integer modular multiplication for most moduli](https://hackmd.io/@gnark/modular_multiplication#fn1)
   
 [11] . [Jacobian coordinates for short Weierstrass curves](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
+
+[12] . [Koshelev, D. (2022). Indifferentiable hashing to ordinary elliptic F q-curves of j= 0 with the cost of one exponentiation in Fq.](https://link.springer.com/article/10.1007/s10623-022-01012-8) 
