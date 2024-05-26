@@ -161,7 +161,6 @@ fn main() {
 ```
 This code snippet demonstrates the simplicity and efficiency of the library's usage for performing pairings-based cryptography operations.
 
-
 <table>
   <thead>
     <tr>
@@ -169,7 +168,7 @@ This code snippet demonstrates the simplicity and efficiency of the library's us
       <th>Pairings</th>
       <th>Miller Loop</th>
       <th>Final Expo.</th>
-      <th>Hashing to G1</th>
+      <th>Hashing to G1</th> 
       <th>Hashing to G2</th>
       <th>Mul. on G1 (GLV)</th>
       <th>Mul. on G2 (GLS)</th>
@@ -179,7 +178,7 @@ This code snippet demonstrates the simplicity and efficiency of the library's us
     <tr>
       <th>BLS12-381</th>
       <td align="center">1.65 ms</td>
-      <td align="center"><font color="red">680.85 µs</td>
+      <td align="center">680.85 µs</td>
       <td align="center">958.08 µs</td>
       <td align="center">206.83 µs</td>
       <td align="center">481.27 µs</td>
