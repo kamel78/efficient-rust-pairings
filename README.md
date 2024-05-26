@@ -161,9 +161,10 @@ fn main() {
 ```
 This code snippet demonstrates the simplicity and efficiency of the library's usage for performing pairings-based cryptography operations.
 
-## Performances and run-time results 
+### Performance and Runtime Results
 
-The following table illustrates obteined performances and run-time resuls for diffrents implemented operations for all curves. Tests have been performed on a i7-10700FCPU 2.9Ghz, with 16Go of RAM. Some operations have timing measures in µs (take less than one millisecond).
+The following table illustrates the obtained performances and runtime results for various implemented operations across all curves. The tests were performed on an Intel Core i7-10700F CPU running at 2.9 GHz, with 16 GB of RAM. Some operations have timing measurements in microseconds (µs) as they take less than one millisecond.
+
 <table>
   <thead>
     <tr>
