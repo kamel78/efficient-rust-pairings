@@ -163,7 +163,7 @@ fn main() {
 ```
 This code snippet demonstrates the simplicity and efficiency of the library's usage for performing pairings-based cryptography operations.
 
-### Performance and Runtime Results
+## Performance and Runtime Results
 
 The following table illustrates the obtained performances and runtime results for various implemented operations across all curves. The tests were performed on an Intel Core i7-10700F CPU running at 2.9 GHz, with 16 GB of RAM. Some operations have timing measurements in microseconds (µs) as they take less than one millisecond. Note that for the 256-bit security level (provided by the BLS48 curve), the obtained results are significantly better than the existing ones presented [here](https://github.com/mk-math-kyushu/bls48/blob/master/README.md) using a C++ implementation of BLS48, when using a similar performance architecture.
 
@@ -233,6 +233,78 @@ The following table illustrates the obtained performances and runtime results fo
     </tr>
   </tbody>
 </table>
+
+## Illustrative demonstrations
+
+The implemented curves provide conversion routines to several representation formats (Decimal, Hexadecimal, Base64, and byte arrays), making I/O integration trivial during protocol implementation. We provide two illustrative implementation code examples for BLS signatures and Identity-Based Encryption, respectively. A full "Demos" directory containing several other implementations of pairings-based cryptography protocols will be uploaded to the repository as soon as possible (feel free to try it and provide comments).
+
+
+### 1. BLS Signature scheme
+
+The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `p`, and follows these steps:
+
+1. **Setup**:
+    - Select an elliptic curve `E` and define the groups `G1`, `G2`, and `GT` of order `p`, admitting a bilinear pairing `e: G1 × G2 → GT`.
+    - Choose a generator `g ∈ G2`.
+
+2. **Key Generation**:
+    - **Private Key (sk)**: Randomly select a private key `x ∈ Fr`.
+    - **Public Key (pk)**: Compute the public key `pk = x * g ∈ G2`.
+
+3. **Signing**:
+    - Compute `H(m)`, the hash of the message `m` to a point in `G1`.
+    - Compute the signature `σ = x * H(m) ∈ G1`.
+
+4. **Verification**:
+    - Compute `H(m) ∈ G1` in the same way as above.
+    - Verify `e(σ, g) = e(H(m), pk)`.
+
+The following code snippets illustrate how such a scheme can easily be implemented using the present library.
+
+```rust
+use pairings::{Bls12Curves, PairingsEngine};
+
+fn main() {    
+    // Hashing to elliptic curves support two modes :  
+    //      mode = 0 stands for Non-uniform-Encoding, while mode = 1 stands for Random Oracle Model encoding 
+
+    let engine = pairings::BLS12::_461();
+
+    // Key-paire genration :
+    let sk = engine.fr.random_element();
+    let pk = sk * engine.g2.default_generator();
+    println!(" Secrete key (base64) = {}", sk.to_base64());
+    println!(" Public Key  (base64) = {}", pk.encode_to_base64());       
+
+    // BLS Signing : 
+    let message = "This is a simple message to be signed. A message can be any arbitrary length string ....";
+    let hashed_message = engine.g1.hash_to_field(&message, 0);
+    let signature = sk * hashed_message;
+    println!(" Signatue is (base64): {}", signature.encode_to_base64());
+
+    // BLS Verification :
+    let hashed_message = engine.g1.hash_to_field(&message, 0);
+    let verification_result = engine.paire(&signature, &engine.g2.default_generator()) == engine.paire(&hashed_message, &pk);
+    println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});
+
+    // Faster way to verify using multi-pairings
+    let verification_result = engine.multi_paire(&[signature,hashed_message], &[-engine.g2.default_generator(),pk]) == engine.gt.one();
+    println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});       
+}
+```
+```bash
+PS C:\pairings-rust> cargo run
+   Compiling pairings-rust v0.1.0 (C:\Users\Kamel\Desktop\new-pairings-rust\pairings-rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.78s
+     Running `target\debug\pairings-rust.exe`
+ Secrete key (base64) = D2byDX9BZ9oGoPrmLrZL6rQQnOR28f7ud8j3FkDzn5O25I1wx8qi
+ Public Key  (base64) = p2jFDR75AwFg70jol1BT7v8r+PeEPy5ueGM53fdrFWyM34ipzZffmbf6x/jzALdGmewAPFVinG2URQuHxFuzZcGJVzxkuWB8kfm/Axs8kkHZUGEUNAfGiUp12NK8TUANYN2C9wiQl3gv/jhhuoZSvdWBI2g=
+ Signatue is (base64): rOgxEY8EdlN1Kw/9N3lAH77SqckVVQ1CBG32ur09I2TAeFLh5CB7lpXcJgBzw/cuT8tea5adggID7w==
+Verification result : correct
+Verification result (using multi-pairings) : correct
+PS C:\Users\Kamel\Desktop\new-pairings-rust\pairings-rust>
+```
+### 1. Identity-based encryption scheme
 
 ## References 
 
