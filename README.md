@@ -302,7 +302,7 @@ PS C:\pairings-rust> cargo run
  Signatue is (base64): rOgxEY8EdlN1Kw/9N3lAH77SqckVVQ1CBG32ur09I2TAeFLh5CB7lpXcJgBzw/cuT8tea5adggID7w==
 Verification result : correct
 Verification result (using multi-pairings) : correct
-PS C:\Users\Kamel\Desktop\new-pairings-rust\pairings-rust>
+PS C:\pairings-rust>
 ```
 ### 1. Identity-based encryption scheme
 
