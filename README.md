@@ -161,6 +161,73 @@ fn main() {
 ```
 This code snippet demonstrates the simplicity and efficiency of the library's usage for performing pairings-based cryptography operations.
 
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Pairings</th>
+      <th>Miller Loop</th>
+      <th>Final Expo.</th>
+      <th>Hashing to G1</th>
+      <th>Hashing to G2</th>
+      <th>Mul. on G1 (GLV)</th>
+      <th>Mul. on G2 (GLS)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>BLS12-381</th>
+      <td align="center">1.65 ms</td>
+      <td align="center">680.85 µs</td>
+      <td align="center">958.08 µs</td>
+      <td align="center">206.83 µs</td>
+      <td align="center">481.27 µs</td>
+      <td align="center">145.94 µs</td>
+      <td align="center">366.56 µs</td>
+    </tr>
+    <tr>
+      <th>BLS12-461</th>
+      <td align="center">2.86 ms</td>
+      <td align="center">1.22 ms</td>
+      <td align="center">1.56 ms</td>
+      <td align="center">319.69 µs</td>
+      <td align="center">1.35 ms</td>
+      <td align="center">262.08 µs</td>
+      <td align="center">652.37 µs</td>
+    </tr>
+    <tr>
+      <th>BLS24-479</th>
+      <td align="center">8.49 ms</td>
+      <td align="center">2.51 ms</td>
+      <td align="center">5.99 ms</td>
+      <td align="center">334.58 µs</td>
+      <td align="center">4.50 ms</td>
+      <td align="center">318.45 µs</td>
+      <td align="center">2.20 ms</td>
+    </tr>
+    <tr>
+    <th>BLS24-559</th>
+      <td align="center">11.46 ms</td>
+      <td align="center">3.43 ms</td>
+      <td align="center">8.17 ms</td>
+      <td align="center">280.86 µs</td>
+      <td align="center">6.98 ms</td>
+      <td align="center">466.58 µs</td>
+      <td align="center">3.16 ms</td>
+    </tr>
+    <tr>
+    <th>BLS48-575</th>
+      <td align="center">33.82 ms</td>
+      <td align="center">6.03 ms</td>
+      <td align="center">27.78 ms</td>
+      <td align="center">204.79 µs</td>
+      <td align="center">18.12 ms</td>
+      <td align="center">519.22 µs</td>
+      <td align="center">10.35 ms</td>
+    </tr>
+  </tbody>
+</table>
 ## References 
 
 [1] . [Pairing-Friendly Curves : draft-irtf-cfrg-pairing-friendly-curves-11.](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/)
