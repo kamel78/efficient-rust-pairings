@@ -234,12 +234,12 @@ The following table illustrates the obtained performances and runtime results fo
   </tbody>
 </table>
 
-## Illustrative demonstrations
+## Illustrative demonstrations 
 
 The implemented curves provide conversion routines to several representation formats (Decimal, Hexadecimal, Base64, and byte arrays), making I/O integration trivial during protocol implementation. We provide two illustrative implementation code examples for BLS signatures and Identity-Based Encryption, respectively. A full "Demos" directory containing several other implementations of pairings-based cryptography protocols will be uploaded to the repository as soon as possible (feel free to try it and provide comments).
 
 
-### 1. BLS Signature scheme
+### 1. BLS Signature scheme [13](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
 
 The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`, and follows these steps:
 
@@ -304,9 +304,9 @@ Verification result : correct
 Verification result (using multi-pairings) : correct
 PS C:\pairings-rust>
 ```
-### 1. Identity-based encryption scheme
+### 1. Identity-based encryption scheme [14](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
 
-The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. The scheme involves several mathematical steps based on elliptic curve pairings :
+The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
 
 1. **Setup: System Initialization**:
    - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.g1`.
@@ -314,25 +314,98 @@ The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and
    - The master secret key is `s`.
 
 2. **Key Generation :Private Key Generation for User**:
-   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hashto_G1(ID) ∈ G1`.
-   - The PKG computes the private key for `ID` as `dID = s.QID`.
+   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_G1(ID) ∈ G1`.
+   - The PKG computes the private key for `ID` as `dID = s.QID ∈ G1`.
 
 3. **Encrypting a Message**:
-   - Sender wishes to send a message \( M \in G_2 \) to a user with identity \( ID \).
-   - The sender computes \( Q_{ID} = H_1(ID) \).
-   - The sender selects a random \( r \in \mathbb{Z}_q \) and computes:
-     - Ciphertext component \( C_1 = rP \).
-     - Ciphertext component \( C_2 = M \cdot e(Q_{ID}, P_0)^r \).
-   - The ciphertext is \( C = (C_1, C_2) \).
+    When a sender wishes to send a message `M` to a user with identity `ID`, he performs the following :
+   - The sender computes `QID = Hash_to_G1(ID)`.
+   - The sender selects a random `a ∈Fr' and computes:
+     - Ciphertext component `C1 = r.g2 ∈ G2`.
+     - Ciphertext component  `C2 = M ⊕ HDK(e(QID, MPk)^r)`, when HDK is a secure key derivation function.
+   - The ciphertext is `C = (C1, C2)`.
 
 4. **Decrypting the Ciphertext**:
-   - The recipient uses their private key \( d_{ID} \) to compute:
-     - \( e(d_{ID}, C_1) = e(sQ_{ID}, rP) = e(Q_{ID}, P)^{sr} = e(Q_{ID}, P_0)^r \).
-   - The recipient then computes the message \( M \) as:
-     - \( M = C_2 / e(d_{ID}, C_1) \).
+   - The recipient uses their private key `dID` to compute:
+     - `e(dID, C1) = e(s.QID, a.g2) = e(QID, g2)^(s.ar) = e(QID, MPk)^r`.
+   - The recipient then computes the message `M` as:
+     - `M = C2 ⊕ HDK(e(dID, C1))`.
 
-This process ensures secure communication based on the hardness of the bilinear Diffie-Hellman problem and eliminates the need for a traditional public key infrastructure.
+This process ensures secure communication based on the hardness of the bilinear Diffie-Hellman problem and eliminates the need for a traditional public key infrastructure. 
 
+The following is a code snippet of the Boneh-Franklin IBE's implementation using the implemented library. However, it's essential to note that the following code is just a proof of concept and requires further adjustments if a concrete real application is targeted (including especially IND-CCA updates to the scheme...).
+```rust
+use base64::{engine::general_purpose, Engine};
+use pairings::{Bls12Curves, PairingsEngine};
+
+fn main() {
+    let engine = pairings::BLS12::_461();
+    // Generation of Master Keys (Setup):
+    let msk =  engine.fr.random_element();
+    let mpk = msk * engine.g2.default_generator();
+    println!("The Master secrete key : {} ",msk.to_base64());
+    println!("The Master public key : {} \n",mpk.encode_to_base64());
+
+    // Key extraction : generation of the user's secrete key for corresponding Identity :
+    let user_identity ="ID-1";    
+    let id_sk = msk * engine.g1.hash_to_field(&user_identity, 0);
+    println!("User's secrete key for identity '{}' : {} \n",user_identity,id_sk.encode_to_base64()); 
+    
+    // Key confirmation : user can confirm the authenticity and corectness of the secrete key like follows: 
+    let valide_secrete_key = engine.paire(&id_sk, &engine.g2.default_generator()) 
+                                   == engine.paire(&engine.g1.hash_to_field(&user_identity, 0), &mpk);
+    println!("User's secrete key confirmation : {} ",if valide_secrete_key {"Valid key\n"} else {"Invalid key\n"}); 
+
+    //  Encryption of a message to the user using its Identity :
+    let message ="This is a simple message to be signed. A message can be any arbitrary length string ....";
+    println!("Plaintext message : {}\n",message);
+    let message_as_bytes: Vec<u8> = message.as_bytes().to_vec();
+    let a = engine.fr.random_element();
+    let u = a * engine.g2.default_generator();
+    let key_stream = engine.paire(&engine.g1.hash_to_field(&user_identity, 0),&mpk)
+                              .pow(&a).derive_hkdf(8*message_as_bytes.len(), None);
+    let encrypted_data: Vec<u8> = key_stream.iter().zip(message_as_bytes.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
+    let encrypted_message =[u.encode_to_base64(),general_purpose::STANDARD.encode(encrypted_data)];
+    println!("Encrypted message : {:?}\n",encrypted_message);
+
+    // Decryption of the message using the user's secrete key 
+    let decoded_encryption = general_purpose::STANDARD.decode(&encrypted_message[1]).unwrap();
+    let u = engine.g2.from_base64(&encrypted_message[0]);
+    let key_stream = engine.paire(&id_sk, &u).derive_hkdf(8*decoded_encryption.len(), None); 
+    let decrypted_message : Vec<u8> = key_stream.iter().zip(decoded_encryption.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
+    println!("Decrypted message : {}",std::str::from_utf8(&decrypted_message).unwrap());
+}
+```
+```bash
+PS C:\pairings-rust> cargo run
+   Compiling pairings-rust v0.1.0 (/Users/neptune/Desktop/Rust-Pairings/pairings-rust)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/pairings-rust`
+The Master secrete key : AmuxOKifYyMz691pN0TWEg9YJ3oRmlYFWeqDC87OAN//DOd7gMSK 
+The Master public key : o3cYmzmzTGY+oO7nfCzo0aVbzAQA6fpKvLRxo3C1v7RFbMlA72cxwE3mQHg0fuFKKSfK/uyrmz2lWwUPD+IUqlHwSnPPK7DeHThCFF7QXJcLfLQSgaqEeP0jiUzj4J7qeCw4VfTaBTEROIZwnnJW6xJcHc4= 
+
+User's secrete key for identity 'ID-1' : hnqW0zS1XdisCJOHrJL5v5Kr/F/w06WpPDpDoR2m8L4vZnDlH5Xji21RD0GMHrdDbB1JTjKUe0ogPg== 
+
+User's secrete key confirmation : Valid key
+ 
+Plaintext message : This is a simple message to be signed. A message can be any arbitrary length string ....
+
+Encrypted message : ["rSJQ5OensV32nOuyjE59C6iAJ/8inxOSVV7Dfsw7IEUDYJggBasZq+UAkmkbJhqNw3+6BmtNopSM0xR++csiDqhAw4FeViyBNe3mkydnMShzDQIyXxTmimvcMx2zlLDab66IiHX7VHS8Ud2E1YznxhuvxgI=", "D+KS5i5y+I377rTgTkEpBKp03ITt6VPhFFTDZY/9LrcSYF62JQHC7E3Z3i0yy/ZNBLTesBrimhpNiY9PWvOpIm7aWEL1g+OUz/MA4O4/TzlVIfiekjOOmQ=="]
+
+Decrypted message : This is a simple message to be signed. A message can be any arbitrary length string ....
+PS C:\pairings-rust>
+```
+We plan to include a demonstration folder in the near future, which will contain implementations of several other pairing-based encryption schemes, including: Hierarchical Identity-Based Encryption (HIBE), Proxy Re-encryption, Identity-Based Signature, Signcryption, Attribute-Based Encryption, Searchable Encryption, Zero-Knowledge Proofs, and much more.
+
+
+Feel free to comment, correct, or propose any additional updates to this code. Your comments are welcome at kamel_mh@yahoo.fr.
+
+
+
+
+
+
+FARAOUN Kamel Mohamed.
 
 ## References 
 
@@ -359,3 +432,8 @@ This process ensures secure communication based on the hardness of the bilinear 
 [11] . [Jacobian coordinates for short Weierstrass curves](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
 
 [12] . [Koshelev, D. (2022). Indifferentiable hashing to ordinary elliptic F q-curves of j= 0 with the cost of one exponentiation in Fq.](https://link.springer.com/article/10.1007/s10623-022-01012-8) 
+
+[13] . [Short Signatures from the Weil Pairing](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
+
+[14] . [Identity-Based Encryption from the Weil Pairing](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
+
