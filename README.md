@@ -307,7 +307,7 @@ PS C:\pairings-rust>
 ### 1. Identity-based encryption scheme
 # Boneh-Franklin Identity-Based Encryption (IBE) Scheme
 
-The Boneh-Franklin IBE scheme involves several mathematical steps based on elliptic curve pairings. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. Here is a brief description of each step of the **Boneh-Franklin Identity-Based Encryption Scheme**, one of the generale, and wide used IBE schemes:
+The Boneh-Franklin IBE scheme is one of the, and widely used IBE schemes, that involves several mathematical steps based on elliptic curve pairings. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. Here is a brief description of each step :
 
 ## Setup
 2. **System Initialization**:
