@@ -241,7 +241,7 @@ The implemented curves provide conversion routines to several representation for
 
 ### 1. BLS Signature scheme
 
-The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `p`, and follows these steps:
+The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`, and follows these steps:
 
 1. **Setup**:
     - Select an elliptic curve `E` and define the groups `G1`, `G2`, and `GT` of order `p`, admitting a bilinear pairing `e: G1 × G2 → GT`.
@@ -305,6 +305,54 @@ Verification result (using multi-pairings) : correct
 PS C:\pairings-rust>
 ```
 ### 1. Identity-based encryption scheme
+# Boneh-Franklin Identity-Based Encryption (IBE) Scheme
+
+The Boneh-Franklin IBE scheme involves several mathematical steps based on elliptic curve pairings. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. Here is a brief description of each step of the **Boneh-Franklin Identity-Based Encryption Scheme**, one of the generale, and wide used IBE schemes:
+
+## Setup
+2. **System Initialization**:
+   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.g1`.
+   - The master public key is `MPk`.
+   - The master secret key is `s`.
+
+## Key Generation
+3. **Private Key Generation for User**:
+   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hashto_G1(ID) ∈ G1`.
+   - The PKG computes the private key for `ID` as `dID = s.QID`.
+
+## Encryption
+4. **Encrypting a Message**:
+   - Sender wishes to send a message \( M \in G_2 \) to a user with identity \( ID \).
+   - The sender computes \( Q_{ID} = H_1(ID) \).
+   - The sender selects a random \( r \in \mathbb{Z}_q \) and computes:
+     - Ciphertext component \( C_1 = rP \).
+     - Ciphertext component \( C_2 = M \cdot e(Q_{ID}, P_0)^r \).
+   - The ciphertext is \( C = (C_1, C_2) \).
+
+## Decryption
+5. **Decrypting the Ciphertext**:
+   - The recipient uses their private key \( d_{ID} \) to compute:
+     - \( e(d_{ID}, C_1) = e(sQ_{ID}, rP) = e(Q_{ID}, P)^{sr} = e(Q_{ID}, P_0)^r \).
+   - The recipient then computes the message \( M \) as:
+     - \( M = C_2 / e(d_{ID}, C_1) \).
+
+## Summary of Mathematical Steps
+1. **Setup**:
+   - Generate system parameters: \( (P, P_0) \), where \( P_0 = sP \).
+2. **Key Generation**:
+   - For identity \( ID \), compute \( Q_{ID} = H_1(ID) \).
+   - Private key \( d_{ID} = sQ_{ID} \).
+3. **Encryption**:
+   - For message \( M \) and identity \( ID \), compute \( Q_{ID} = H_1(ID) \).
+   - Select random \( r \).
+   - Compute \( C_1 = rP \) and \( C_2 = M \cdot e(Q_{ID}, P_0)^r \).
+   - Ciphertext \( C = (C_1, C_2) \).
+4. **Decryption**:
+   - For ciphertext \( (C_1, C_2) \) and private key \( d_{ID} \), compute \( e(d_{ID}, C_1) \).
+   - Recover \( M = C_2 / e(d_{ID}, C_1) \).
+
+This process ensures secure communication based on the hardness of the bilinear Diffie-Hellman problem and eliminates the need for a traditional public key infrastructure.
+
 
 ## References 
 
