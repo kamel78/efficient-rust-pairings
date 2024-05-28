@@ -249,7 +249,7 @@ The following table illustrates the obtained performances and runtime results fo
 The implemented curves provide conversion routines to several representation formats (Decimal, Hexadecimal, Base64, and byte arrays), making I/O integration trivial during protocol implementation. We provide two illustrative implementation code examples for BLS signatures and Identity-Based Encryption, respectively. A full "Demos" directory containing several other implementations of pairings-based cryptography protocols will be uploaded to the repository as soon as possible (feel free to try it and provide comments).
 
 
-### 1. BLS Signature scheme [13](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
+### 1. BLS Signature scheme [[13]](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
 
 The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`, and follows these steps:
 
@@ -314,7 +314,7 @@ Verification result : correct
 Verification result (using multi-pairings) : correct
 PS C:\pairings-rust>
 ```
-### 1. Identity-based encryption scheme [14](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
+### 1. Identity-based encryption scheme [[14]](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
 
 The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
 
