@@ -3,7 +3,7 @@
 
 Pairings-based cryptography with rust: a constant-time and efficient implementation with rust for BLS12, BLS24 and BLS48 curves. 
 
-The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves. According to the standardization draft at [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairings-based cryptography due to several optimization and security benefits. We have implemented a more optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to G2 is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both G1 and G2 sub-groups. Detailed information is provided below.
+The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves. According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to \(G_2\) is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both \(G_1\) and \(G_2\) sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
 
 ## Implemented Curves
 
@@ -16,7 +16,7 @@ BLS12 curves are implemented based on the following Fp12 tower construction:
 - **GF(p⁶)** = Fp6<Fp2, v³ - (u + 1)>
 - **GF(p¹²)** = Fp12<Fp2, w² - v>
 
-This construction is chosen due to several optimization techniques that leverage -1 as a quadratic non-residue (QNR) for Fp and (1 + u) as a QNR for Fp2, enabling efficient butterfly multiplication.
+This construction is chosen due to several optimization techniques that leverage -1 as a quadratic non-residue (QNR) for Fp and (1 + u) as a QNR for Fp2, enabling efficient "butterfly" multiplication on Fp2.
 
 The field GF(p) is defined by the prime p = 1/3 (x - 1)²(x⁴ - x² + 1) + x. The torsion subgroup sizes on both G1 and G2 is r = x⁴ - x² + 1, with x being a parameter of the curve. The curve on G1 is defined by y² = x³ + b, and the twist curve on G2 = GF(p²)[r] is defined by y² = x³ + b * w.
 
@@ -410,12 +410,17 @@ We plan to include a demonstration folder in the near future, which will contain
 
 Feel free to comment, correct, or propose any additional updates to this code. Your comments are welcome at kamel_mh@yahoo.fr.
 
+ps: for Python community, a replic of this library is already implemented in python and can be found here : https://github.com/kamel78/pairings-python. 
 
 
 
 
+
+## Author 
 
 FARAOUN Kamel Mohamed.
+
+UDL-University.
 
 ## References 
 
