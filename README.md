@@ -47,7 +47,7 @@ For further details and discussions, refer to [[2]](https://github.com/zcash/zca
 - **G1 cofactor h1** = `0x1ffffffbfffe00000001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
 - **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
 
-For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](/tree/main/pairings/src/parameters/paramlist.rs).
+For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
 ### 2. BLS24 Configuration
 
