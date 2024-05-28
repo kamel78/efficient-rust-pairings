@@ -108,13 +108,13 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **G1 cofactor h1** = `0xff800802`
 - **G1/G2 Isogeny order** (for SWU mapping) = 2 / 5
 
-For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](pairings/parameters/paramlist.rs).
+For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
 ## Constant-time Implementation
 
 In order to avoid several side-channel attacks, a constant-time implementation of almost all operations is provided, especially for:
 
-1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in [pairings/parameters/paramlist.rs](pairings/parameters/paramlist.rs)). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
+1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs)). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
 
     To explore alternative addition methods, we implemented a new mapping scheme proposed by Dmitry Khovratovich in [12](https://link.springer.com/article/10.1007/s10623-022-01012-8) for performing hashing to G1 on BLS curves. We optimized the proposed algorithm and managed to produce a constant-time version. However, the implementation is only valid for the BLS12-361 curve since it is conditioned by (p mod 9 = 4) and (p mod 27 = 1) (a condition not met by all other implemented curves). Additionally, the obtained performance is not very interesting compared to SWU, particularly due to the required long exponentiation.
 
@@ -126,7 +126,7 @@ In order to avoid several side-channel attacks, a constant-time implementation o
 
 6. **Constant-time Multiplication for Points from E(Fp2), E(Fp4), and E(Fp8)**: Using w-sized sliding window, a fast and stable approach is used as a replacement for the "Montgomery-Ladder" one.
 
-7. **Scalar's Recoding**: Implemented separately in a constant-time way for all involved scalar multiplications, on all curve's sub-groups. (see [pairings/parameters/paramlist.rs](pairings/tools/recoders.rs) for implementation details).
+7. **Scalar's Recoding**: Implemented separately in a constant-time way for all involved scalar multiplications, on all curve's sub-groups. (see [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/tools/recoders.rs) for implementation details).
 
 ## Points and Field Elements Representation
 
@@ -152,7 +152,7 @@ where `k` is the embedding-degree of the curve (respectively 12,24 and 48 for BL
 
 ##  Rust Implementation Considerations 
 
-Existing Rust implementations of pairings-based cryptography are generally tailored to specific curves, meaning that the code works only for a given combination of parameters and hence is not extensible. One of the challenges of the proposed implementation is to permit full parametrization of the code for any new curve definition while maintaining the same level of code optimality and runtime performance. This can be achieved by simply injecting new parameters in a textual hexadecimal format (a clear illustration of this can be found in the file [pairings/parameters/paramlist.rs](pairings/parameters/paramlist.rs)). If you are interested in testing the code with other BLS curves, feel free to ask for a personal script i have developped to generate all corresponding required parametres from the basic parametres of the curve (uselly the `x` coeificient defining 'p' and 'r`).
+Existing Rust implementations of pairings-based cryptography are generally tailored to specific curves, meaning that the code works only for a given combination of parameters and hence is not extensible. One of the challenges of the proposed implementation is to permit full parametrization of the code for any new curve definition while maintaining the same level of code optimality and runtime performance. This can be achieved by simply injecting new parameters in a textual hexadecimal format (a clear illustration of this can be found in the file [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs)). If you are interested in testing the code with other BLS curves, feel free to ask for a personal script i have developped to generate all corresponding required parametres from the basic parametres of the curve (uselly the `x` coeificient defining 'p' and 'r`).
 
 Pairings engines are implemented as constant Rust "structurs" using the OnceCell crate. This enables fast and efficient use of the implemented curves for new implementations of pairings-based protocols and transparent manipulation of related functionalities. As an illustration, the following code demonstrates how fast and simple the implemented library can be used:
 
