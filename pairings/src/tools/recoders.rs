@@ -1,4 +1,4 @@
-// Code developed by FARAOUN Kamel Mohamed.
+// Code developped by FARAOUN Kamel Mohamed.
 // EEDIS-Laboratory. UDL-University. Algeria
 // During May 2024.
 
