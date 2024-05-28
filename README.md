@@ -143,8 +143,12 @@ Arithmetic on elliptic curves is implemented using Jacobian coordinate systems t
 ## Implemented pairings
 For implemented BLS curves, Optimal Ate pairings is a refinement of the Ate pairing on elliptic curves, optimized for efficiency. I is considered as best choice for both runtime and security consideration, compared to Weil, Tate and R-Ate variants. Fo a curve E, and defined groupes `G1`, `G2`, and `GT` of same prime order `r`, the optimal Ate pairings `e: G1 × G2 → GT` is defined by :
 
-$$ e_{opt} : \mathbb{G}_1 \mathbb{G}_2 \mapsto \mathbb{G}_T $$
-$$           (P,Q) \mapsto e_{opt} = $$
+$$ e_{opt} : \mathbb{G}_1 \times \mathbb{G}_2 \rightarrow  \mathbb{G}_T $$
+
+
+$$                   (P,Q) \mapsto e_{opt}(P,Q) = f_{xQ}(P)^{(p^k-1)/r} $$
+
+where `k` is the embedding-degree of the curve (respectively 12,24 and 48 for BLS12,BLS24 and BLS48).
 
 ##  Rust Implementation Considerations 
 
