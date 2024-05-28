@@ -152,7 +152,7 @@ where `k` is the embedding-degree of the curve (respectively 12,24 and 48 for BL
 
 ##  Rust Implementation Considerations 
 
-Existing Rust implementations of pairings-based cryptography are generally tailored to specific curves, meaning that the code works only for a given combination of parameters and hence is not extensible. One of the challenges of the proposed implementation is to permit full parametrization of the code for any new curve definition while maintaining the same level of code optimality and runtime performance. This can be achieved by simply injecting new parameters in a textual hexadecimal format (a clear illustration of this can be found in the file `pairings/parameters/paramlist.rs`.
+Existing Rust implementations of pairings-based cryptography are generally tailored to specific curves, meaning that the code works only for a given combination of parameters and hence is not extensible. One of the challenges of the proposed implementation is to permit full parametrization of the code for any new curve definition while maintaining the same level of code optimality and runtime performance. This can be achieved by simply injecting new parameters in a textual hexadecimal format (a clear illustration of this can be found in the file `pairings/parameters/paramlist.rs`). If you are interested in testing the code with other BLS curves, feel free to ask for a personal script i have developped to generate all corresponding required parametres from the basic parametres of the curve (uselly the `x` coeificient defining 'p' and 'r`).
 
 Pairings engines are implemented as constant Rust "structurs" using the OnceCell crate. This enables fast and efficient use of the implemented curves for new implementations of pairings-based protocols and transparent manipulation of related functionalities. As an illustration, the following code demonstrates how fast and simple the implemented library can be used:
 
@@ -446,7 +446,7 @@ UDL-University.
   
 [11] . [Jacobian coordinates for short Weierstrass curves](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
 
-[12] . [Koshelev, D. (2022). Indifferentiable hashing to ordinary elliptic F q-curves of j= 0 with the cost of one exponentiation in Fq.](https://link.springer.com/article/10.1007/s10623-022-01012-8) 
+[12] . [Indifferentiable hashing to ordinary elliptic F q-curves of j= 0 with the cost of one exponentiation in Fq.](https://link.springer.com/article/10.1007/s10623-022-01012-8) 
 
 [13] . [Short Signatures from the Weil Pairing](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
 
