@@ -141,7 +141,10 @@ Arithmetic on finite fields (on both GF(p) and GF(r) defined for handling arithm
 Arithmetic on elliptic curves is implemented using Jacobian coordinate systems to avoid inversion on affine coordinates. Optimal point addition and doubling were implemented from [[11]](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
 
 ## Implemented pairings
-For implemented BLS curves, Optimal Ate pairings is a refinement of the Ate pairing on elliptic curves, optimized for efficiency. I is considered as best choice for both runtime and security consideration, compared to Weil, Tate and R-Ate variants.
+For implemented BLS curves, Optimal Ate pairings is a refinement of the Ate pairing on elliptic curves, optimized for efficiency. I is considered as best choice for both runtime and security consideration, compared to Weil, Tate and R-Ate variants. Fo a curve E, and defined groupes `G1`, `G2`, and `GT` of same prime order `r`, the optimal Ate pairings `e: G1 × G2 → GT` is defined by :
+
+$$ e_{opt} : \mathbb{G}_1 \mathbb{G}_2 \mapsto \mathbb{G}_T $$
+$$           (P,Q) \mapsto e_{opt} = $$
 
 ##  Rust Implementation Considerations 
 
