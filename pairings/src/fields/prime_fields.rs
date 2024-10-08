@@ -14,6 +14,11 @@ use crate::tools::hashs::*;
 use super::super::tools::exponent::Exponent;
 use super::arithmetic;
 
+#[derive(Debug, PartialEq, Eq)]
+pub enum Endianness {
+    Little,
+    Big,
+}
 
 #[derive(Clone,Debug)]
 pub struct FieldParams<'a, const N:usize> {
@@ -104,11 +109,13 @@ impl <'a, const N:usize> PrimeField<N> {
             else {Self::from_bigint(&self,&BigInt::from_str_radix(&strin,16).unwrap())}
         }
 
-    pub fn from_byte_array(&self, source :&[u8]) -> FieldElement<N>{
+    pub fn from_byte_array(&self, source :&[u8], repre:Endianness) -> FieldElement<N>{
+            let mut _source = source.to_vec();
+            if repre == Endianness::Big {(_source).reverse();}
             let numbits = self.parametres.num_of_bits;                
             let sizeinbytes = (numbits >> 3) + if (numbits % 8) ==0 {0} else {1}; 
-            if sizeinbytes != source.len() {panic!("Size of input does not correspond to the field's extension ...");}                   
-             Self::from_bigint(&self,&os2ip(&source).to_bigint().unwrap())
+            if sizeinbytes != _source.len() {panic!("Size of input does not correspond to the field's extension ...");}                   
+            Self::from_bigint(&self,&os2ip(&_source).to_bigint().unwrap())
         }                   
     
     pub fn from_base64(&self, source :&str) -> FieldElement<N>
@@ -119,7 +126,7 @@ impl <'a, const N:usize> PrimeField<N> {
                     panic!("Failed to decode base64 string");
                 }
             };
-            self.from_byte_array(&decoded_bytes)
+            self.from_byte_array(&decoded_bytes, Endianness::Little)
         }
     
     pub fn zero(&self) ->FieldElement<N>  {
