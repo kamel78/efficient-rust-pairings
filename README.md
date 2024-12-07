@@ -1,4 +1,4 @@
-# Efficient and constant-time Rust implementation of pairings on BLS12, BLS24 and BLS48 curves.
+# Ru-Paire : Efficient and constant-time Rust implementation of pairings on BLS12, BLS24 and BLS48 curves.
 
 
 Pairings-based cryptography with rust: a constant-time and efficient implementation with rust for BLS12, BLS24 and BLS48 curves. 
@@ -6,9 +6,9 @@ Pairings-based cryptography with rust: a constant-time and efficient implementat
 The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves (a total number of 15 curves is implemented). According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to \(G_2\) is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both \(G_1\) and \(G_2\) sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
 
 Implemented curves are :
-BLS-12 : BLS12-381,BLS12-446,BLS12-461.
-BLS-24 : Bls24-315,Bls24-477, Bls24-479,Bls24-509, Bls24-509Snark, Bls24-559.
-BLS-48 : Bls48-277, Bls48-287, Bls48-571, Bls48-573, Bls48-575, Bls48-581.
+-  BLS-12 : BLS12-381,BLS12-446,BLS12-461.
+-  BLS-24 : Bls24-315,Bls24-477, Bls24-479,Bls24-509, Bls24-509Snark, Bls24-559.
+-  BLS-48 : Bls48-277, Bls48-287, Bls48-571, Bls48-573, Bls48-575, Bls48-581.
 
 ## Details of Implemented Curves
 
@@ -301,7 +301,7 @@ The following table illustrates the obtained performances and runtime results fo
 <table>
   <thead>
     <tr>
-      <th></th>
+      <th>                </th>
       <th>Pairings</th>
       <th>Miller Loop</th>
       <th>Final Expo.</th>
@@ -314,6 +314,16 @@ The following table illustrates the obtained performances and runtime results fo
   <tbody>
     <tr>
       <th>BLS12-381</th>
+      <td align="center">1.65 ms</td>
+      <td align="center">680.85 µs</td>
+      <td align="center">958.08 µs</td>
+      <td align="center">206.83 µs</td>
+      <td align="center">481.27 µs</td>
+      <td align="center">145.94 µs</td>
+      <td align="center">366.56 µs</td>
+    </tr>
+    <tr>
+      <th>BLS12-446</th>
       <td align="center">1.65 ms</td>
       <td align="center">680.85 µs</td>
       <td align="center">958.08 µs</td>
@@ -342,8 +352,7 @@ The following table illustrates the obtained performances and runtime results fo
       <td align="center">318.45 µs</td>
       <td align="center">2.20 ms</td>
     </tr>
-    <tr>
-    <th>BLS24-559</th>
+    <th>BLS24-315</th>
       <td align="center">11.46 ms</td>
       <td align="center">3.43 ms</td>
       <td align="center">8.17 ms</td>
@@ -352,7 +361,88 @@ The following table illustrates the obtained performances and runtime results fo
       <td align="center">466.58 µs</td>
       <td align="center">3.16 ms</td>
     </tr>
+    <th>BLS24-477</th>
+        <td align="center">11.46 ms</td>
+        <td align="center">3.43 ms</td>
+        <td align="center">8.17 ms</td>
+        <td align="center">280.86 µs</td>
+        <td align="center">6.98 ms</td>
+        <td align="center">466.58 µs</td>
+        <td align="center">3.16 ms</td>
+      </tr>
     <tr>
+    <th>BLS24-479</th>
+      <td align="center">11.46 ms</td>
+      <td align="center">3.43 ms</td>
+      <td align="center">8.17 ms</td>
+      <td align="center">280.86 µs</td>
+      <td align="center">6.98 ms</td>
+      <td align="center">466.58 µs</td>
+      <td align="center">3.16 ms</td>
+    </tr>  
+    <th>BLS24-509</th>
+        <td align="center">11.46 ms</td>
+        <td align="center">3.43 ms</td>
+        <td align="center">8.17 ms</td>
+        <td align="center">280.86 µs</td>
+        <td align="center">6.98 ms</td>
+        <td align="center">466.58 µs</td>
+        <td align="center">3.16 ms</td>
+      </tr>
+    <th>BLS24-509-SNARK</th>
+        <td align="center">11.46 ms</td>
+        <td align="center">3.43 ms</td>
+        <td align="center">8.17 ms</td>
+        <td align="center">280.86 µs</td>
+        <td align="center">6.98 ms</td>
+        <td align="center">466.58 µs</td>
+        <td align="center">3.16 ms</td>
+      </tr>
+    <th>BLS24-559</th>
+        <td align="center">11.46 ms</td>
+        <td align="center">3.43 ms</td>
+        <td align="center">8.17 ms</td>
+        <td align="center">280.86 µs</td>
+        <td align="center">6.98 ms</td>
+        <td align="center">466.58 µs</td>
+        <td align="center">3.16 ms</td>
+      </tr>
+    <th>BLS48-277</th>
+        <td align="center">33.82 ms</td>
+        <td align="center">6.03 ms</td>
+        <td align="center">27.78 ms</td>
+        <td align="center">204.79 µs</td>
+        <td align="center">18.12 ms</td>
+        <td align="center">519.22 µs</td>
+        <td align="center">10.35 ms</td>
+      </tr>
+    <th>BLS48-287</th>
+        <td align="center">33.82 ms</td>
+        <td align="center">6.03 ms</td>
+        <td align="center">27.78 ms</td>
+        <td align="center">204.79 µs</td>
+        <td align="center">18.12 ms</td>
+        <td align="center">519.22 µs</td>
+        <td align="center">10.35 ms</td>
+      </tr>
+    <th>BLS48-571</th>
+        <td align="center">33.82 ms</td>
+        <td align="center">6.03 ms</td>
+        <td align="center">27.78 ms</td>
+        <td align="center">204.79 µs</td>
+        <td align="center">18.12 ms</td>
+        <td align="center">519.22 µs</td>
+        <td align="center">10.35 ms</td>
+      </tr>
+    <th>BLS48-573</th>
+        <td align="center">33.82 ms</td>
+        <td align="center">6.03 ms</td>
+        <td align="center">27.78 ms</td>
+        <td align="center">204.79 µs</td>
+        <td align="center">18.12 ms</td>
+        <td align="center">519.22 µs</td>
+        <td align="center">10.35 ms</td>
+      </tr>
     <th>BLS48-575</th>
       <td align="center">33.82 ms</td>
       <td align="center">6.03 ms</td>
@@ -362,6 +452,15 @@ The following table illustrates the obtained performances and runtime results fo
       <td align="center">519.22 µs</td>
       <td align="center">10.35 ms</td>
     </tr>
+    <th>BLS48-581</th>
+        <td align="center">33.82 ms</td>
+        <td align="center">6.03 ms</td>
+        <td align="center">27.78 ms</td>
+        <td align="center">204.79 µs</td>
+        <td align="center">18.12 ms</td>
+        <td align="center">519.22 µs</td>
+        <td align="center">10.35 ms</td>
+      </tr>
   </tbody>
 </table>
 
