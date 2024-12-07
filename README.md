@@ -53,14 +53,14 @@ For a full description of all related parameters, see the file [pairings/paramet
 
 BLS24 curves are implemented using one of the following tow diffrents Fp24 tower construction:
 
-## Construction 1 :
+#### Construction 1 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² - (u + 1)>
 - **GF(p⁸)** = Fp8<Fp4, w² - v>
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 
-## Construction 2 :
+#### Construction 2 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² - mu>
 - **GF(p⁴)** = Fp4<Fp2, v² - u>
@@ -126,7 +126,7 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 
 BLS24 curves are implemented using one of the following three diffrents Fp24 tower construction:
 
-# Construction 1 :
+#### Construction 1 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² - (u + 1)>
@@ -134,7 +134,7 @@ BLS24 curves are implemented using one of the following three diffrents Fp24 tow
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 - **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
 
-# Construction 2 :
+#### Construction 2 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² - mu>
 - **GF(p⁴)** = Fp4<Fp2, v² - u>
@@ -142,7 +142,7 @@ BLS24 curves are implemented using one of the following three diffrents Fp24 tow
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 - **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
   
-# Construction 3 :
+#### Construction 3 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² + (u + 1)>
