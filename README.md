@@ -7,7 +7,7 @@ The current library implements pairing computations for various security levels:
 
 ## Implemented Curves
 
-### 1. BLS12 Configuration
+### 1. BLS12 Curves
 
 BLS12 curves are implemented based on the following Fp12 tower construction:
 
@@ -49,18 +49,18 @@ For further details and discussions, refer to [[2]](https://github.com/zcash/zca
 
 For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
-### 2. BLS24 Configuration
+### 2. BLS24 Curves
 
 BLS24 curves are implemented using one of the following tow diffrents Fp24 tower construction:
 
-# Construction 1 :
+## Construction 1 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² - (u + 1)>
 - **GF(p⁸)** = Fp8<Fp4, w² - v>
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 
-# Construction 2 :
+## Construction 2 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² - mu>
 - **GF(p⁴)** = Fp4<Fp2, v² - u>
@@ -122,7 +122,7 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **G1 cofactor h1** = `0x10007fffffffe41`
 - **G1/G2 Isogeny order** (for SWU mapping) = 3 / 2
 
-### 1.3. BLS48 Configuration
+### 1.3. BLS48 Curves
 
 BLS24 curves are implemented using one of the following three diffrents Fp24 tower construction:
 
@@ -136,25 +136,27 @@ BLS24 curves are implemented using one of the following three diffrents Fp24 tow
 
 # Construction 2 :
 - **Fp** = GF(p)
+- **GF(p²)** = Fp2<Fp, u² - mu>
+- **GF(p⁴)** = Fp4<Fp2, v² - u>
+- **GF(p⁸)** = Fp4<Fp4, w² - v>
+- **GF(p²⁴)** = Fp24<Fp8, z³ - w>
+- **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
+  
+# Construction 3 :
+- **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² + (u + 1)>
 - **GF(p⁸)** = Fp4<Fp4, w² + v>
 - **GF(p²⁴)** = Fp24<Fp8, z³ + w>
 - **GF(p⁴⁸)** = Fp48<Fp24, t² + z>
 
-# Construction 3 :
-- **Fp** = GF(p)
-- **GF(p²)** = Fp2<Fp, u² - mu>
-- **GF(p⁴)** = Fp4<Fp2, v² - u>
-- **GF(p⁸)** = Fp4<Fp4, w² - v>
-- **GF(p²⁴)** = Fp24<Fp8, z³ - w>
-- **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
+
 
 The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x¹⁶-x⁸+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x¹⁶ - x⁸ + 1`, for a given x defined as a parameter of the curve.
 
 The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Multiple sets of parameters for the BLS48 are implemented, namely : the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
 
-#### Parameters of the BLS48-575 (M-Type):
+#### Parameters of the BLS48-575 (Construction 1 / M-Type):
 
 - **x** = `-0xff800801`
 - **p** = `0x526222098be0d6809ec22a43ab79d1f2120ecbcfbab8934e6c19b1b30a442eea74c92f3ed3940030dbe05f531cd41c69464c793821806366ec094551c2828e22d811dcc31beb02ab`
@@ -164,6 +166,57 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **G1 cofactor h1** = `0xff800802`
 - **G1/G2 Isogeny order** (for SWU mapping) = 2 / 5
 
+#### Parameters of the BLS48-573 (Construction 2 / M-Type):
+
+- **x** = `-0xebb80000`
+- **p** = `0x1350A0C8F4218394626944EAAACAD46B7D9DCCAF31B20F740ED2116B9AE102823CC9418DC9618006091711D2F3FAEAE45DCF869195000000000000000000000048591C1506C2AAAB`
+- **r** = `0x4458504C82BC004E92C41DF977ED10A1FF8A72FABA6AD8172680FFFFFFFFFFFF7BB9F34451F9811E2EF203B4BF00000000000000000000000000000000000001`
+- **b** = `4`
+- **btw** = `4*w`
+- **G1 cofactor h1** = `0xEBB80001`
+- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+
+#### Parameters of the BLS48-571 (Construction 1 / D-Type):
+
+- **x** = `-0xDFF82003`
+- **p** = `0x7B1D5F53AB93DA0DFB9F21560B2B742699F19B31171DC1F4F2FE9A7C17C8DFCDA3BBDF9472A6FF9146F545249F4B8573A2E89B92214F7C4E00910FBFCBF22A81C0F860053BC28AD`
+- **r** = `0x1E28A91A0191684861EAD5CDB62B9DC5E2A2D58DBFE31A16601954CB2730810A9DC070B78A9CE17D434A966E61C7FD6156DFC1FDDEAB80A7CCF6E197BC1BBDA1`
+- **b** = `1`
+- **btw** = `1/w`
+- **G1 cofactor h1** = `0xDFF82004`
+- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 3
+
+#### Parameters of the BLS48-581 (Construction 3 / D-Type):
+
+- **x** = `-0x140000381`
+- **p** = `0x1280F73FF3476F313824E31D47012A0056E84F8D122131BB3BE6C0F1F3975444A48AE43AF6E082ACD9CD30394F4736DAF68367A5513170EE0A578FDF721A4A48AC3EDC154E6565912B`
+- **r** = `0x2386F8A925E2885E233A9CCC1615C0D6C635387A3F0B3CBE003FAD6BC972C2E6E741969D34C4C92016A85C7CD0562303C4CCBE599467C24DA118A5FE6FCD671C01`
+- **b** = `1`
+- **btw** = `1/w`
+- **G1 cofactor h1** = `0x140000382`
+- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 3
+
+#### Parameters of the BLS48-287 (Construction 2 / D-Type):
+
+- **mu** = `7`
+- **x** = `-0xfe5a`
+- **p** = `0x4BF7DE6E1D51DE83959E838FBF22B9C69A0BDDB43A92FFE58991E030D59F59012948C019`
+- **r** = `0xE6DC7C1E51849ED8600B531684F0AAB685556A2CA8E9EEFD977023E3C503DF01`
+- **b** = `4`
+- **btw** = `4*w`
+- **G1 cofactor h1** = `0xFE5B`
+- **G1/G2 Isogeny order** (for SWU mapping) = 3 / 13
+
+#### Parameters of the BLS48-277 (Construction 3 / 3-Type):
+
+- **x** = `-0xadc0`
+- **p** = `0x14674E388DA524ED849C38E2B187AF9D0AB5A06A924839098277FD01150000274ECB6B`
+- **r** = `0x84DF8C1C76BB2FAD35B6493401B99C1FCB04C29E9A9613CEBF000000000001`
+- **b** = `2`
+- **btw** = `2/*w`
+- **G1 cofactor h1** = `0xADC1`
+- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+
 For a full description of all related parameters, see the file [pairings/src/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
 ## Constant-time Implementation
@@ -172,17 +225,15 @@ In order to avoid several side-channel attacks, a constant-time implementation o
 
 1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in [pairings/src/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs)). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
 
-    To explore alternative addition methods, we implemented a new mapping scheme proposed by Dmitry Khovratovich in [12](https://link.springer.com/article/10.1007/s10623-022-01012-8) for performing hashing to G1 on BLS curves. We optimized the proposed algorithm and managed to produce a constant-time version. However, the implementation is only valid for the BLS12-361 curve since it is conditioned by (p mod 9 = 4) and (p mod 27 = 1) (a condition not met by all other implemented curves). Additionally, the obtained performance is not very interesting compared to SWU, particularly due to the required long exponentiation.
+2. **GLV-multiplication for Torsion Points on G1**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to G1.
 
-3. **GLV-multiplication for Torsion Points on G1**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to G1.
+3. **GLS-multiplication on G2**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [[5]](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from G2 on BLS12, BLS24, and BLS48.
 
-4. **GLS-multiplication on G2**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [[5]](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from G2 on BLS12, BLS24, and BLS48.
+4. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group G2 is decomposed using the method from [[6]](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
 
-5. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group G2 is decomposed using the method from [[6]](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
+5. **Constant-time Multiplication for Points from E(Fp2), E(Fp4), and E(Fp8)**: Using w-sized sliding window, a fast and stable approach is used as a replacement for the "Montgomery-Ladder" one.
 
-6. **Constant-time Multiplication for Points from E(Fp2), E(Fp4), and E(Fp8)**: Using w-sized sliding window, a fast and stable approach is used as a replacement for the "Montgomery-Ladder" one.
-
-7. **Scalar's Recoding**: Implemented separately in a constant-time way for all involved scalar multiplications, on all curve's sub-groups. (see [pairings/src/tools/recoders.rs](../../tree/main/pairings/src/tools/recoders.rs) for implementation details).
+6. **Scalar's Recoding**: Implemented separately in a constant-time way for all involved scalar multiplications, on all curve's sub-groups. (see [pairings/src/tools/recoders.rs](../../tree/main/pairings/src/tools/recoders.rs) for implementation details).
 
 ## Points and Field Elements Representation
 
