@@ -51,19 +51,37 @@ For a full description of all related parameters, see the file [pairings/paramet
 
 ### 2. BLS24 Configuration
 
-BLS24 curves are implemented based on the following Fp24 tower construction:
+BLS24 curves are implemented using one of the following tow diffrents Fp24 tower construction:
 
+# Construction 1 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² - (u + 1)>
 - **GF(p⁸)** = Fp8<Fp4, w² - v>
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 
-The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x⁸-x⁴+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x⁸ - x⁴ + 1`, with `x` being a parameter of the curve.
+# Construction 2 :
+- **Fp** = GF(p)
+- **GF(p²)** = Fp2<Fp, u² - mu>
+- **GF(p⁴)** = Fp4<Fp2, v² - u>
+- **GF(p⁸)** = Fp8<Fp4, w² - v>
+- **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 
-The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴) is defined by `y² = x³ + btw`. Two different sets of parameters for the BLS24 are implemented, namely the BLS24-479 and the BLS24-559 (we recommend the BLS24-559 for a guaranteed 192-bit security level, depending on whether we consider Razvan’s attack).
+The prime field GF(p) for both constructions is defined by the prime `p = 1/3 (x-1)²(x⁸-x⁴+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x⁸ - x⁴ + 1`, with `x` being a parameter of the curve.
 
-#### Parameters of the BLS24-479 (D-Type):
+The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴) is defined by `y² = x³ + btw`. Several sets of parameters for the BLS24 are implemented, namely the BLS24-477, BLS24-479, BLS24-509 and the BLS24-559. For z-snarks applications, we implemented the curves BLS24-315 and the BLS24-509-SNARK.
+
+#### Parameters of the BLS24-477 (Construction 1 / M-Type):
+
+- **x** = `- 0xdfff80000080`
+- **p** = `0x167278FAC63BD5B007EBB8F693A2AB3DBD9F92CF437C399D928E94BFE9A04A009FDA9E8CF9226901DE62AEA9DCEA48BF1A0EBBF8860A5E7AD000152B`
+- **r** = `0x57F52EE445CC41781FCD53D13E45F6ACDFE4F9F2A3CD414E71238AFC9FCFC7D38CAEF64F4FF79F90013FFFFFF0000001`
+- **b** = 4
+- **btw** = `4*v`
+- **G1 cofactor h1** = `0xDFFF80000081`
+- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+  
+#### Parameters of the BLS24-479 (Construction 1 / D-Type):
 
 - **x** = `- 0xfffff8f80001`
 - **p** = `0x55553de5583ee8de07a5bd8d1f2b1d181350b13b2aaac13ea6db72c4cb7c8eaf4d23c01812428a6b82580149b426a18f5c662a623ec8036a82d2aaab`
@@ -73,7 +91,28 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **G1 cofactor h1** = `0xfffff8f80002`
 - **G1/G2 Isogeny order** (for SWU mapping) = 2 / 7
 
-#### Parameters of the BLS24-559 (D-Type):
+#### Parameters of the BLS24-509 (Construction 1 / D-Type):
+
+- **x** = `- 0x800000ffff801`
+- **p** = `0x155556FFFF39CA9BFCEDF2B4F9C0ECF6CB8AC8495D187E8C32EA0103E01090BB626E85BF7C18A0F0CFCB5C6071BAD3D2EE63BD076E8D9300A13D118DB8BFD2AB`
+- **r** = `0x100000FFFF870FF91CE195DB5B6F3EBD1E08C94C9E193B724ED58B907FF7C311A80D7CABC647746AE3ECB627C943998457FE001`
+- **b** = 1
+- **btw** = `0xaaaab7fff9ce54dfe76f95a7ce0767b65c56424ae8c3f4619750081f008485db13742dfbe0c507867e5ae3038dd69e97731de83b746c980509e88c6dc5fe956*(1-u)*v`
+- **G1 cofactor h1** = `0x800000FFFF802`
+- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 7
+
+#### Parameters of the BLS24-509-SNARK (Construction 2 / D-Type):
+
+- **mu** = `-5`
+- **x** = `- 0x800000ffff801`
+- **p** = `0x17452A017CBDD682A502A1E13A9D671D27958EECD2C33C3A36C2ADE221D9B956BEA4F49B2B5EE7D7D72AD20065DCB2B8E9CA0015B5152C00000811E000000001`
+- **r** = `0x1126E414A831633D70AF7CD00E285569EF5E4E2C86F03F25AE6C7E77EB5CF329B0F3A2B9DC60598AF7558000020478000000001`
+- **b** = 1
+- **btw** = `0xdf64c674ad84d819634c787232b3dde4af355c14b41f0efba74cebae11c3c00d8c95f904d38f1818119b133705138088c46000d063fe73333380ab99999999a * v`
+- **G1 cofactor h1** = `0x811E000000000`
+- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 5
+
+#### Parameters of the BLS24-559 (Construction 1 / D-Type):
 
 - **x** = `- 0x10007fffffffe40`
 - **p** = `0x557003c04ffe89db51ef86c56921091e1c72d1e92397d41e37c255cd44eff051c38fa813a695c5d574923beee353ada1100a0b5fb2111a277d389362d77fcb581fe8b50105eb`
@@ -85,8 +124,9 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 
 ### 1.3. BLS48 Configuration
 
-BLS48 curves are implemented based on the following Fp48 tower construction:
+BLS24 curves are implemented using one of the following three diffrents Fp24 tower construction:
 
+# Construction 1 :
 - **Fp** = GF(p)
 - **GF(p²)** = Fp2<Fp, u² + 1>
 - **GF(p⁴)** = Fp4<Fp2, v² - (u + 1)>
@@ -94,9 +134,25 @@ BLS48 curves are implemented based on the following Fp48 tower construction:
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 - **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
 
+# Construction 2 :
+- **Fp** = GF(p)
+- **GF(p²)** = Fp2<Fp, u² + 1>
+- **GF(p⁴)** = Fp4<Fp2, v² + (u + 1)>
+- **GF(p⁸)** = Fp4<Fp4, w² + v>
+- **GF(p²⁴)** = Fp24<Fp8, z³ + w>
+- **GF(p⁴⁸)** = Fp48<Fp24, t² + z>
+
+# Construction 3 :
+- **Fp** = GF(p)
+- **GF(p²)** = Fp2<Fp, u² - mu>
+- **GF(p⁴)** = Fp4<Fp2, v² - u>
+- **GF(p⁸)** = Fp4<Fp4, w² - v>
+- **GF(p²⁴)** = Fp24<Fp8, z³ - w>
+- **GF(p⁴⁸)** = Fp48<Fp24, t² - z>
+
 The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x¹⁶-x⁸+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x¹⁶ - x⁸ + 1`, for a given x defined as a parameter of the curve.
 
-The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Only one set of parameters for the BLS48 is implemented, namely the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
+The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Multiple sets of parameters for the BLS48 are implemented, namely : the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
 
 #### Parameters of the BLS48-575 (M-Type):
 
