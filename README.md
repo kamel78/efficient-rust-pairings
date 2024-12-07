@@ -3,9 +3,14 @@
 
 Pairings-based cryptography with rust: a constant-time and efficient implementation with rust for BLS12, BLS24 and BLS48 curves. 
 
-The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves. According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to \(G_2\) is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both \(G_1\) and \(G_2\) sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
+The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves (a total number of 15 curves is implemented). According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to \(G_2\) is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both \(G_1\) and \(G_2\) sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
 
-## Implemented Curves
+Implemented curves are :
+BLS-12 : BLS12-381,BLS12-446,BLS12-461.
+BLS-24 : Bls24-315,Bls24-477, Bls24-479,Bls24-509, Bls24-509Snark, Bls24-559.
+BLS-48 : Bls48-277, Bls48-287, Bls48-571, Bls48-573, Bls48-575, Bls48-581.
+
+## Details of Implemented Curves
 
 ### 1. BLS12 Curves
 
@@ -23,9 +28,8 @@ The field GF(p) is defined by the prime p = 1/3 (x - 1)²(x⁴ - x² + 1) + x. T
 Two different sets of parameters for BLS12 are implemented:
 
 - **BLS12-381**: Widely considered the standard for the 128-bit security level and extensively used by most existing libraries and implementations of pairing-based cryptography. However, recent attacks [[3]](https://eprint.iacr.org/2017/334.pdf) suggest that it does not truly provide 128-bit security.
-- **BLS12-461**: Recommended for a guaranteed 128-bit security level.
-
-For further details and discussions, refer to [[2]](https://github.com/zcash/zcash/issues/4065).
+- **BLS12-461**: Recommended for a guaranteed 128-bit security level. For further details and discussions, refer to [[2]](https://github.com/zcash/zcash/issues/4065).
+- **BLS12-446**: Recommended for a guaranteed 128-bit security level with relatively small prime size. refer to [[2]](https://members.loria.fr/AGuillevic/pairing-friendly-curves/#bls12-381-bls12-461-or-bls12-446).
 
 #### Parameters of the BLS12-381 (M-Type):
 
@@ -37,6 +41,16 @@ For further details and discussions, refer to [[2]](https://github.com/zcash/zca
 - **G1 cofactor h1** = `0xd201000000010001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
 - **G1/G2 Isogeny order** (for SWU mapping) = 11 / 3
 
+#### Parameters of the BLS12-446 (M-Type):
+
+- **x** = `- 0x6008204000000020001`
+- **p** = `0x3CDEE0FB28C5E535200FC34965AAD6400095A4B78A02FE320F75A64BBAC71602824E6DC3E23ACDEE56EE4528C573B5CC311C0026AAB0AAAB`
+- **r** = `0x511B70539F27995B34995830FA4D04C98CCC4C050BC7BB9B0E8D8CA34610428001400040001`
+- **b** = 4
+- **btw** = (1+u)
+- **G1 cofactor h1** = `0x6008204000000020002` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
+- **G1/G2 Isogeny order** (for SWU mapping) = 11 / 3
+- 
 #### Parameters of the BLS12-461 (M-Type):
 
 - **x** = `- 0x1ffffffbfffe00000000`
