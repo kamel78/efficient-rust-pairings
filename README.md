@@ -1,14 +1,171 @@
-# Ru-Paire : Efficient and constant-time Rust implementation of pairings on BLS12, BLS24 and BLS48 curves.
+<div style="display: flex; align-items: center;">
+  <picture>
+    <img src="https://www.rust-lang.org/logos/rust-logo-256x256.png" alt="Your description" style="margin-right: 10px; width: 64px; height: 64px;">
+  </picture>
+  <h1>Ru-Paire : Biliniarity Pairings implementation  with Rust (v 2.0).</h1>
+</div>
 
 
-Pairings-based cryptography with rust: a constant-time and efficient implementation with rust for BLS12, BLS24 and BLS48 curves. 
+## A constant-time and efficient implementation  of Pairings-based cryptography with rust on BLS-12, BLS-24 and BLS-48 curves. 
 
-The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves (a total number of 15 curves is implemented). According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to \(G_2\) is feasible thanks to the existence of prime-order isogenies that enable the SWU mapping for all implemented curves on both \(G_1\) and \(G_2\) sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
+The current library implements pairing computations for various security levels: 128-bit, 192-bit, and 256-bit, respectively, on BLS12, BLS24, and BLS48 curves (a total number of 15 curves is implemented). According to the standardization draft at [\[1\]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/), BLS curves are the most suitable for pairing-based cryptography due to several optimization and security benefits. We have implemented a special optimal set of parameters, particularly for the BLS48 curve, where constant-time hashing to $G_2$ is feasible thanks to the existence of prime-degree isogenies that enable the SWU mapping for all implemented curves on both $G_1$ and $G_2$ sub-groups. We provide a general description of the implemented functionalities with chosen configurations and parameters in the following, while a full description of all implemented aspects with justification of each implementation detail would require a hundred-page technical report!
 
 Implemented curves are :
 -  BLS-12 : BLS12-381,BLS12-446,BLS12-461.
--  BLS-24 : Bls24-315,Bls24-477, Bls24-479,Bls24-509, Bls24-509Snark, Bls24-559.
--  BLS-48 : Bls48-277, Bls48-287, Bls48-571, Bls48-573, Bls48-575, Bls48-581.
+-  BLS-24 : BLS24-315,BLS24-477, BLS24-479,BLS24-509, BLS24-509Snark, BLS24-559.
+-  BLS-48 : BLS48-277, BLS48-287, BLS48-571, BLS48-573, BLS48-575, BLS48-581.
+
+Some security related parameters of the implemented curves are listed in the followings :
+
+<table>
+  <thead>
+    <tr>
+      <th>                </th>
+      <th>k (Embdedding degree) </th>
+      <th>p (bits)</th>
+      <th>r (bits)</th>
+      <th>$P^{(k/d)}$ / $G_2$ (bits)</th> 
+      <th>$p^k$ / $G_T$ (bits)</th>
+      <th>Security level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>BLS12-381</th>
+      <td align="center">12</td>
+      <td align="center">381</td>
+      <td align="center">255 </td>
+      <td align="center">633</td>
+      <td align="center">3816 </td>
+      <td align="center">128</td>
+    </tr>
+    <tr>
+      <th>BLS12-446</th>
+      <td align="center">12</td>
+      <td align="center">446</td>
+      <td align="center">299</td>
+      <td align="center">892</td>
+      <td align="center">5352</td>
+      <td align="center">128</td>
+    </tr>
+    <tr>
+      <th>BLS12-461</th>
+      <td align="center">12</td>
+      <td align="center">461</td>
+      <td align="center">308</td>
+      <td align="center">922</td>
+      <td align="center">5532</td>
+      <td align="center">128</td>
+    </tr>
+    <tr>
+      <th>BLS24-479</th>
+      <td align="center">24</td>
+      <td align="center">476</td>
+      <td align="center">384 </td>
+      <td align="center">1904</td>
+      <td align="center">11424</td>
+      <td align="center">192</td>
+    </tr>
+    <th>BLS24-315</th>
+      <td align="center">24</td>
+      <td align="center">315</td>
+      <td align="center">253 </td>
+      <td align="center">1260</td>
+      <td align="center">7560</td>
+      <td align="center">128</td>
+    </tr>
+    <th>BLS24-477</th>
+       <td align="center">24</td>
+        <td align="center">477ms</td>
+        <td align="center">383</td>
+        <td align="center">1908</td>
+        <td align="center">11448</td>
+        <td align="center">192</td>
+       </tr>
+    <tr>
+    <th>BLS24-479</th>
+      <td align="center">24</td>
+      <td align="center">479</td>
+      <td align="center">384</td>
+      <td align="center">1916</td>
+      <td align="center">11496</td>
+      <td align="center">192</td>
+      </tr>  
+    <th>BLS24-509</th>
+        <td align="center">24</td>
+        <td align="center">509</td>
+        <td align="center">409</td>
+        <td align="center">20392</td>
+        <td align="center">122352</td>
+        <td align="center">192</td>
+      </tr>
+    <th>BLS24-509-SNARK</th>
+        <td align="center">24</td>
+        <td align="center">509</td>
+        <td align="center">409</td>
+        <td align="center">20392</td>
+        <td align="center">122352</td>
+        <td align="center">192</td>
+      </tr>
+    <th>BLS24-559</th>
+        <td align="center">24</td>
+        <td align="center">559</td>
+        <td align="center">449</td>
+        <td align="center">2236</td>
+        <td align="center">13416</td>
+        <td align="center">192</td>
+      </tr>
+    <th>BLS48-277</th>
+        <td align="center">48</td>
+        <td align="center">277</td>
+        <td align="center">248</td>
+        <td align="center">2216</td>
+        <td align="center">13296</td>
+        <td align="center">124</td>
+      </tr>
+    <th>BLS48-287</th>
+        <td align="center">48</td>
+        <td align="center">287</td>
+        <td align="center">256</td>
+        <td align="center">2296</td>
+        <td align="center">13776</td>
+        <td align="center">128</td>
+      </tr>
+    <th>BLS48-571</th>
+        <td align="center">48</td>
+        <td align="center">571</td>
+        <td align="center">509</td>
+        <td align="center">4568</td>
+        <td align="center">27408</td>
+        <td align="center">255</td>
+      </tr>
+    <th>BLS48-573</th>
+        <td align="center">48</td>
+        <td align="center">573</td>
+        <td align="center">511</td>
+        <td align="center">4584 </td>
+        <td align="center">27504 </td>
+        <td align="center">256</td>
+      </tr>
+    <th>BLS48-575</th>
+      <td align="center">48</td>
+      <td align="center">575</td>
+      <td align="center">512</td>
+      <td align="center">4600</td>
+      <td align="center">27600</td>
+      <td align="center">256</td>
+    </tr>
+    <th>BLS48-581</th>
+        <td align="center">48</td>
+        <td align="center">581</td>
+        <td align="center">518</td>
+        <td align="center">4648</td>
+        <td align="center">27888</td>
+        <td align="center">256</td>
+      </tr>
+  </tbody>
+</table>
+
 
 ## Details of Implemented Curves
 
@@ -23,7 +180,7 @@ BLS12 curves are implemented based on the following Fp12 tower construction:
 
 This construction is chosen due to several optimization techniques that leverage -1 as a quadratic non-residue (QNR) for Fp and (1 + u) as a QNR for Fp2, enabling efficient "butterfly" multiplication on Fp2.
 
-The field GF(p) is defined by the prime p = 1/3 (x - 1)²(x⁴ - x² + 1) + x. The torsion subgroup sizes on both G1 and G2 is r = x⁴ - x² + 1, with x being a parameter of the curve. The curve on G1 is defined by y² = x³ + b, and the twist curve on G2 = GF(p²)[r] is defined by y² = x³ + b * w.
+The field GF(p) is defined by the prime p = 1/3 (x - 1)²(x⁴ - x² + 1) + x. The torsion subgroup sizes on both $G_1$ and $G_2$ is r = x⁴ - x² + 1, with x being a parameter of the curve. The curve on $G_1$ is defined by y² = x³ + b, and the twist curve on $G_2$ = GF(p²)[r] is defined by y² = x³ + b * w.
 
 Two different sets of parameters for BLS12 are implemented:
 
@@ -38,8 +195,8 @@ Two different sets of parameters for BLS12 are implemented:
 - **r** = `0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001`
 - **b** = 4
 - **btw** = 4*(1+u)
-- **G1 cofactor h1** = `0xd201000000010001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
-- **G1/G2 Isogeny order** (for SWU mapping) = 11 / 3
+- **$G_1$ cofactor h1** = `0xd201000000010001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 11 / 3
 
 #### Parameters of the BLS12-446 (M-Type):
 
@@ -48,8 +205,8 @@ Two different sets of parameters for BLS12 are implemented:
 - **r** = `0x511B70539F27995B34995830FA4D04C98CCC4C050BC7BB9B0E8D8CA34610428001400040001`
 - **b** = 4
 - **btw** = (1+u)
-- **G1 cofactor h1** = `0x6008204000000020002` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
-- **G1/G2 Isogeny order** (for SWU mapping) = 11 / 3
+- **$G_1$ cofactor h1** = `0x6008204000000020002` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 11 / 3
 - 
 #### Parameters of the BLS12-461 (M-Type):
 
@@ -58,8 +215,8 @@ Two different sets of parameters for BLS12 are implemented:
 - **r** = `0xffffff7fffc0180017fe05fd000e801fc017ffc80001100007fefffeffffc0000000000000001`
 - **b** = 4
 - **btw** = 4*(1+u)
-- **G1 cofactor h1** = `0x1ffffffbfffe00000001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
-- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+- **$G_1$ cofactor h1** = `0x1ffffffbfffe00000001` (simplified cofactor trick according to [https://eprint.iacr.org/2019/403.pdf](https://eprint.iacr.org/2019/403.pdf))
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 7 / 3
 
 For a full description of all related parameters, see the file [pairings/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
@@ -81,7 +238,7 @@ BLS24 curves are implemented using one of the following tow diffrents Fp24 tower
 - **GF(p⁸)** = Fp8<Fp4, w² - v>
 - **GF(p²⁴)** = Fp24<Fp8, z³ - w>
 
-The prime field GF(p) for both constructions is defined by the prime `p = 1/3 (x-1)²(x⁸-x⁴+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x⁸ - x⁴ + 1`, with `x` being a parameter of the curve.
+The prime field GF(p) for both constructions is defined by the prime `p = 1/3 (x-1)²(x⁸-x⁴+1)+x`, while the torsion subgroup size on both $G_1$ and $G_2$ is `r = x⁸ - x⁴ + 1`, with `x` being a parameter of the curve.
 
 The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴) is defined by `y² = x³ + btw`. Several sets of parameters for the BLS24 are implemented, namely the BLS24-477, BLS24-479, BLS24-509 and the BLS24-559. For z-snarks applications, we implemented the curves BLS24-315 and the BLS24-509-SNARK.
 
@@ -92,8 +249,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **r** = `0x57F52EE445CC41781FCD53D13E45F6ACDFE4F9F2A3CD414E71238AFC9FCFC7D38CAEF64F4FF79F90013FFFFFF0000001`
 - **b** = 4
 - **btw** = `4*v`
-- **G1 cofactor h1** = `0xDFFF80000081`
-- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+- **$G_1$ cofactor h1** = `0xDFFF80000081`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 7 / 3
   
 #### Parameters of the BLS24-479 (Construction 1 / D-Type):
 
@@ -102,8 +259,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **r** = `0xffffc7c0057046b26bdc4ce1022439d3586c9e35253fdc6bb4c486b2c06e624fa8dcae61a5547eae9c43a57fe3e00001`
 - **b** = 1
 - **btw** = `0x2aaa9ef2ac1f746f03d2dec68f958e8c09a8589d9555609f536db96265be4757a691e00c09214535c12c00a4da1350c7ae3315311f6401b541695556*(1+u)*v`
-- **G1 cofactor h1** = `0xfffff8f80002`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 7
+- **$G_1$ cofactor h1** = `0xfffff8f80002`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 7
 
 #### Parameters of the BLS24-509 (Construction 1 / D-Type):
 
@@ -112,8 +269,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **r** = `0x100000FFFF870FF91CE195DB5B6F3EBD1E08C94C9E193B724ED58B907FF7C311A80D7CABC647746AE3ECB627C943998457FE001`
 - **b** = 1
 - **btw** = `0xaaaab7fff9ce54dfe76f95a7ce0767b65c56424ae8c3f4619750081f008485db13742dfbe0c507867e5ae3038dd69e97731de83b746c980509e88c6dc5fe956*(1-u)*v`
-- **G1 cofactor h1** = `0x800000FFFF802`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 7
+- **$G_1$ cofactor h1** = `0x800000FFFF802`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 7
 
 #### Parameters of the BLS24-509-SNARK (Construction 2 / D-Type):
 
@@ -123,8 +280,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **r** = `0x1126E414A831633D70AF7CD00E285569EF5E4E2C86F03F25AE6C7E77EB5CF329B0F3A2B9DC60598AF7558000020478000000001`
 - **b** = 1
 - **btw** = `0xdf64c674ad84d819634c787232b3dde4af355c14b41f0efba74cebae11c3c00d8c95f904d38f1818119b133705138088c46000d063fe73333380ab99999999a * v`
-- **G1 cofactor h1** = `0x811E000000000`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 5
+- **$G_1$ cofactor h1** = `0x811E000000000`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 5
 
 #### Parameters of the BLS24-559 (Construction 1 / D-Type):
 
@@ -133,8 +290,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁴
 - **r** = `0x1004007006ff65d0bb6ec2d37308240156364161952ef8fb30d7e88dc80a18eb216a645887544b2fd0d47cff70915710376c0fff69f000001`
 - **b** = `-2`
 - **btw** = `(-1+u)*v`
-- **G1 cofactor h1** = `0x10007fffffffe41`
-- **G1/G2 Isogeny order** (for SWU mapping) = 3 / 2
+- **$G_1$ cofactor h1** = `0x10007fffffffe41`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 3 / 2
 
 ### 1.3. BLS48 Curves
 
@@ -166,9 +323,9 @@ BLS24 curves are implemented using one of the following three diffrents Fp24 tow
 
 
 
-The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x¹⁶-x⁸+1)+x`, while the torsion subgroup size on both G1 and G2 is `r = x¹⁶ - x⁸ + 1`, for a given x defined as a parameter of the curve.
+The prime field GF(p) is defined by the prime `p = 1/3 (x-1)²(x¹⁶-x⁸+1)+x`, while the torsion subgroup size on both $G_1$ and $G_2$ is `r = x¹⁶ - x⁸ + 1`, for a given x defined as a parameter of the curve.
 
-The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Multiple sets of parameters for the BLS48 are implemented, namely : the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime order to hash in constant-time to G1 and G2 using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for G2 at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
+The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸) is defined by `y² = x³ + btw`. Multiple sets of parameters for the BLS48 are implemented, namely : the BLS12-575. This is a curve we discovered using exhaustive parameters search, with respect to several optimization criteria, in particular; the existence of isogenies of prime degree to hash in constant-time to $G_1$ and $G_2$ using SWU mapping. Unfortunately and surprisingly, the BLS48 introduced in the standarization draft [[1]](https://datatracker.ietf.org/doc/draft-irtf-cfrg-pairing-friendly-curves/) does not have an isogeny for $G_2$ at all, and its tower construction is not adequate for optimal implementation (due to the tower construction, and much more …..). 
 
 #### Parameters of the BLS48-575 (Construction 1 / M-Type):
 
@@ -177,8 +334,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0xf81e36cde28fad72337ee7497988c7a518b481d35f9cca5a5cbb9c453c85b3ef09f470219adad65475809e468f2faa5490a999c9525ef3f601cd211813004001`
 - **b** = `1`
 - **btw** = `w`
-- **G1 cofactor h1** = `0xff800802`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 5
+- **$G_1$ cofactor h1** = `0xff800802`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 5
 
 #### Parameters of the BLS48-573 (Construction 2 / M-Type):
 
@@ -187,8 +344,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0x4458504C82BC004E92C41DF977ED10A1FF8A72FABA6AD8172680FFFFFFFFFFFF7BB9F34451F9811E2EF203B4BF00000000000000000000000000000000000001`
 - **b** = `4`
 - **btw** = `4*w`
-- **G1 cofactor h1** = `0xEBB80001`
-- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+- **$G_1$ cofactor h1** = `0xEBB80001`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 7 / 3
 
 #### Parameters of the BLS48-571 (Construction 1 / D-Type):
 
@@ -197,8 +354,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0x1E28A91A0191684861EAD5CDB62B9DC5E2A2D58DBFE31A16601954CB2730810A9DC070B78A9CE17D434A966E61C7FD6156DFC1FDDEAB80A7CCF6E197BC1BBDA1`
 - **b** = `1`
 - **btw** = `1/w`
-- **G1 cofactor h1** = `0xDFF82004`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 3
+- **$G_1$ cofactor h1** = `0xDFF82004`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 3
 
 #### Parameters of the BLS48-581 (Construction 3 / D-Type):
 
@@ -207,8 +364,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0x2386F8A925E2885E233A9CCC1615C0D6C635387A3F0B3CBE003FAD6BC972C2E6E741969D34C4C92016A85C7CD0562303C4CCBE599467C24DA118A5FE6FCD671C01`
 - **b** = `1`
 - **btw** = `1/w`
-- **G1 cofactor h1** = `0x140000382`
-- **G1/G2 Isogeny order** (for SWU mapping) = 2 / 3
+- **$G_1$ cofactor h1** = `0x140000382`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 2 / 3
 
 #### Parameters of the BLS48-287 (Construction 2 / D-Type):
 
@@ -218,8 +375,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0xE6DC7C1E51849ED8600B531684F0AAB685556A2CA8E9EEFD977023E3C503DF01`
 - **b** = `4`
 - **btw** = `4*w`
-- **G1 cofactor h1** = `0xFE5B`
-- **G1/G2 Isogeny order** (for SWU mapping) = 3 / 13
+- **$G_1$ cofactor h1** = `0xFE5B`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 3 / 13
 
 #### Parameters of the BLS48-277 (Construction 3 / 3-Type):
 
@@ -228,8 +385,8 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **r** = `0x84DF8C1C76BB2FAD35B6493401B99C1FCB04C29E9A9613CEBF000000000001`
 - **b** = `2`
 - **btw** = `2/*w`
-- **G1 cofactor h1** = `0xADC1`
-- **G1/G2 Isogeny order** (for SWU mapping) = 7 / 3
+- **$G_1$ cofactor h1** = `0xADC1`
+- **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 7 / 3
 
 For a full description of all related parameters, see the file [pairings/src/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs).
 
@@ -237,13 +394,13 @@ For a full description of all related parameters, see the file [pairings/src/par
 
 In order to avoid several side-channel attacks, a constant-time implementation of almost all operations is provided, especially for:
 
-1. **Hashing to Elliptic Curves Sub-groups (for G1 and G2) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to G1 in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in [pairings/src/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs)). To our knowledge, this is the first implementation of SWU on G2 for pairings-friendly curves.
+1. **Hashing to Elliptic Curves Sub-groups (for $G_1$ and $G_2$) using Simplified Shallue-van de Woestijne-Ulas Method (Simplified SWU for AB = 0)**[[4]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3): This method is commonly used for hashing to $G_1$ in several existing implementations. However, we have developed a special code to find corresponding isogenies for implemented BLS12, BLS24, and BLS48 curves (results are listed in [pairings/src/parameters/paramlist.rs](../../tree/main/pairings/src/parameters/paramlist.rs)). To our knowledge, this is the first implementation of SWU on $G_2$ for pairings-friendly curves.
 
-2. **GLV-multiplication for Torsion Points on G1**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to G1.
+2. **GLV-multiplication for Torsion Points on $G_1$**: Here, we introduced a personalized optimization that halves the size of the precomputed look-up table (implemented using sliding window size w=3). The approach provides both constant-time and high-speed hashing to $G_1$.
 
-3. **GLS-multiplication on G2**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [[5]](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from G2 on BLS12, BLS24, and BLS48.
+3. **GLS-multiplication on $G_2$**: Implemented using constant-time scalars recoding and optimized cofactor-cleaning based on works in [[5]](https://eprint.iacr.org/2013/458.pdf). We implemented GLS-4, GLS-8, and GLS-16 respectively for scalar multiplication of torsion points from $G_2$ on BLS12, BLS24, and BLS48.
 
-4. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group G2 is decomposed using the method from [[6]](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
+4. **Fast Cofactor-cleaning using Decompositions of h2**: The cofactor of the torsion sub-group $G_2$ is decomposed using the method from [[6]](https://ia.cr/2017/419) (Budroni-Pintore). We introduced a minor contribution that further speeds up this operator using an "inverted-endomorphism computation" (maybe will be published later…).
 
 5. **Constant-time Multiplication for Points from E(Fp2), E(Fp4), and E(Fp8)**: Using w-sized sliding window, a fast and stable approach is used as a replacement for the "Montgomery-Ladder" one.
 
@@ -251,7 +408,7 @@ In order to avoid several side-channel attacks, a constant-time implementation o
 
 ## Points and Field Elements Representation
 
-Standard point compression and serialization are utilized to enable point encoding according to the standards defined in the ZCash serialization format [[7]](https://www.ietf.org/archive/id/draft-irtf-cfrg-pairing-friendly-curves-11.html#name-zcash-serialization-format-). The scheme is generalized to all implemented curves for elements from both G1 and G2.
+Standard point compression and serialization are utilized to enable point encoding according to the standards defined in the ZCash serialization format [[7]](https://www.ietf.org/archive/id/draft-irtf-cfrg-pairing-friendly-curves-11.html#name-zcash-serialization-format-). The scheme is generalized to all implemented curves for elements from both $G_1$ and $G_2$.
 
 Finite field element representation follows RFC standards [[8]](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-06#name-hashing-to-a-finite-field), while the derivation also adheres to the following scheme ([RFC](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-4.1)). Both curve points and field elements can be exported/imported in decimal representation, hexadecimal representation, byte array format, and interestingly, base64 encoding format.
 
@@ -259,10 +416,10 @@ Finite field element representation follows RFC standards [[8]](https://datatrac
 
 Arithmetic on finite fields (on both GF(p) and GF(r) defined for handling arithmetic on curves and scalars respectively) is implemented using the Montgomery representation to provide fast and efficient computation. Special optimizations of the CIOS reduction approach [[9]](https://www.microsoft.com/en-us/research/wp-content/uploads/1998/06/97Acar.pdf) are implemented from [[10]](https://hackmd.io/@gnark/modular_multiplication#fn1) to ensure optimal arithmetic when conditions are satisfied (for both multiplication and squaring).
 
-Arithmetic on elliptic curves is implemented using Jacobian coordinate systems to avoid inversion on affine coordinates. Optimal point addition and doubling were implemented from [[11]](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
+Arithmetic on elliptic curves is implemented using Jacobian coordinate systems to avoid inversion on affine coordinates. Optimal point addition and doubling were implemented from [[11]](https://www.hyperelliptic.org/EFD/$G_1$p/auto-shortw-jacobian.html#addition-madd-2007-bl).
 
 ## Implemented pairings
-For implemented BLS curves, Optimal Ate pairings is a refinement of the Ate pairing on elliptic curves, optimized for efficiency. I is considered as best choice for both runtime and security consideration, compared to Weil, Tate and R-Ate variants. Fo a curve E, and defined groupes `G1`, `G2`, and `GT` of same prime order `r`, the optimal Ate pairings `e: G1 × G2 → GT` is defined by :
+For implemented BLS curves, Optimal Ate pairings is a refinement of the Ate pairing on elliptic curves, optimized for efficiency. I is considered as best choice for both runtime and security consideration, compared to Weil, Tate and R-Ate variants. Fo a curve E, and defined groupes `$G_1$`, `$G_2$`, and `GT` of same prime order `r`, the optimal Ate pairings `e: $G_1$ × $G_2$ → GT` is defined by :
 
 $$ e_{opt} : \mathbb{G}_1 \times \mathbb{G}_2 \rightarrow  \mathbb{G}_T $$
 
@@ -278,12 +435,12 @@ Existing Rust implementations of pairings-based cryptography are generally tailo
 Pairings engines are implemented as constant Rust "structurs" using the OnceCell crate. This enables fast and efficient use of the implemented curves for new implementations of pairings-based protocols and transparent manipulation of related functionalities. As an illustration, the following code demonstrates how fast and simple the implemented library can be used:
 
 ```rust
-use pairings::{Bls12Curves, PairingsEngine};
+use pairings::{BLS12Curves, PairingsEngine};
 
 fn main() {
     let engine = pairings::BLS12::_381();
-    let p = engine.g1.hash_to_field("identity 1", 0);
-    let q = engine.g2.hash_to_field("identity 2", 0);
+    let p = engine.$G_1$.hash_to_field("identity 1", 0);
+    let q = engine.$G_2$.hash_to_field("identity 2", 0);
     let a = engine.fr.random_element();
     let b = engine.fr.random_element();
     let e1 = engine.paire(&(a*p), &(b*q));
@@ -305,10 +462,10 @@ The following table illustrates the obtained performances and runtime results fo
       <th>Pairings</th>
       <th>Miller Loop</th>
       <th>Final Expo.</th>
-      <th>Hashing to G1</th> 
-      <th>Hashing to G2</th>
-      <th>Mul. on G1 (GLV)</th>
-      <th>Mul. on G2 (GLS)</th>
+      <th>Hashing to $G_1$</th> 
+      <th>Hashing to $G_2$</th>
+      <th>Mul. on $G_1$ (GLV)</th>
+      <th>Mul. on $G_2$ (GLS)</th>
     </tr>
   </thead>
   <tbody>
@@ -324,13 +481,13 @@ The following table illustrates the obtained performances and runtime results fo
     </tr>
     <tr>
       <th>BLS12-446</th>
-      <td align="center">1.65 ms</td>
-      <td align="center">680.85 µs</td>
-      <td align="center">958.08 µs</td>
-      <td align="center">206.83 µs</td>
-      <td align="center">481.27 µs</td>
-      <td align="center">145.94 µs</td>
-      <td align="center">366.56 µs</td>
+      <td align="center">2.58 ms</td>
+      <td align="center">1.07 ms</td>
+      <td align="center">1.50 ms</td>
+      <td align="center">216.3 µs</td>
+      <td align="center">893.1 µs</td>
+      <td align="center">212.2 µs</td>
+      <td align="center">556.8 µs</td>
     </tr>
     <tr>
       <th>BLS12-461</th>
@@ -344,25 +501,25 @@ The following table illustrates the obtained performances and runtime results fo
     </tr>
     <tr>
       <th>BLS24-479</th>
-      <td align="center">8.49 ms</td>
-      <td align="center">2.51 ms</td>
-      <td align="center">5.99 ms</td>
-      <td align="center">334.58 µs</td>
-      <td align="center">4.50 ms</td>
-      <td align="center">318.45 µs</td>
-      <td align="center">2.20 ms</td>
+      <td align="center">9.1 ms</td>
+      <td align="center">2.63 ms</td>
+      <td align="center">6.51 ms</td>
+      <td align="center">292.9 µs</td>
+      <td align="center">5.28 ms</td>
+      <td align="center">596.3 µs</td>
+      <td align="center">2.36 ms</td>
     </tr>
     <th>BLS24-315</th>
-      <td align="center">11.46 ms</td>
-      <td align="center">3.43 ms</td>
-      <td align="center">8.17 ms</td>
-      <td align="center">280.86 µs</td>
-      <td align="center">6.98 ms</td>
-      <td align="center">466.58 µs</td>
-      <td align="center">3.16 ms</td>
+      <td align="center">4.16 ms</td>
+      <td align="center">1.11 ms</td>
+      <td align="center">3.03 ms</td>
+      <td align="center">80.1 µs</td>
+      <td align="center">2.18 ms</td>
+      <td align="center">113.9 µs</td>
+      <td align="center">1.018 ms</td>
     </tr>
     <th>BLS24-477</th>
-        <td align="center">11.46 ms</td>
+        <td align="center">8.99 ms</td>
         <td align="center">3.43 ms</td>
         <td align="center">8.17 ms</td>
         <td align="center">280.86 µs</td>
@@ -373,93 +530,93 @@ The following table illustrates the obtained performances and runtime results fo
     <tr>
     <th>BLS24-479</th>
       <td align="center">11.46 ms</td>
-      <td align="center">3.43 ms</td>
-      <td align="center">8.17 ms</td>
-      <td align="center">280.86 µs</td>
-      <td align="center">6.98 ms</td>
-      <td align="center">466.58 µs</td>
-      <td align="center">3.16 ms</td>
+      <td align="center">2.60 ms</td>
+      <td align="center">6.38 ms</td>
+      <td align="center">285.4 µs</td>
+      <td align="center">4.53 ms</td>
+      <td align="center">327.5 µs</td>
+      <td align="center">2.32 ms</td>
     </tr>  
     <th>BLS24-509</th>
-        <td align="center">11.46 ms</td>
-        <td align="center">3.43 ms</td>
-        <td align="center">8.17 ms</td>
-        <td align="center">280.86 µs</td>
-        <td align="center">6.98 ms</td>
-        <td align="center">466.58 µs</td>
-        <td align="center">3.16 ms</td>
+        <td align="center">9.36 ms</td>
+        <td align="center">2.73 ms</td>
+        <td align="center">6.61 ms</td>
+        <td align="center">294.03 µs</td>
+        <td align="center">5.04 ms</td>
+        <td align="center">350. µs</td>
+        <td align="center">2.49 ms</td>
       </tr>
     <th>BLS24-509-SNARK</th>
-        <td align="center">11.46 ms</td>
-        <td align="center">3.43 ms</td>
-        <td align="center">8.17 ms</td>
-        <td align="center">280.86 µs</td>
-        <td align="center">6.98 ms</td>
-        <td align="center">466.58 µs</td>
-        <td align="center">3.16 ms</td>
+        <td align="center">12.34 ms</td>
+        <td align="center">3.57 ms</td>
+        <td align="center">8.76 ms</td>
+        <td align="center">289.9 µs</td>
+        <td align="center">4.87 ms</td>
+        <td align="center">351.1 µs</td>
+        <td align="center">3.28 ms</td>
       </tr>
     <th>BLS24-559</th>
-        <td align="center">11.46 ms</td>
-        <td align="center">3.43 ms</td>
-        <td align="center">8.17 ms</td>
+        <td align="center">12.29 ms</td>
+        <td align="center">3.62 ms</td>
+        <td align="center">8.64 ms</td>
         <td align="center">280.86 µs</td>
         <td align="center">6.98 ms</td>
         <td align="center">466.58 µs</td>
         <td align="center">3.16 ms</td>
       </tr>
     <th>BLS48-277</th>
-        <td align="center">33.82 ms</td>
-        <td align="center">6.03 ms</td>
-        <td align="center">27.78 ms</td>
-        <td align="center">204.79 µs</td>
-        <td align="center">18.12 ms</td>
-        <td align="center">519.22 µs</td>
-        <td align="center">10.35 ms</td>
+        <td align="center">11.04 ms</td>
+        <td align="center">1.59 ms</td>
+        <td align="center">9.43 ms</td>
+        <td align="center">56.96 µs</td>
+        <td align="center">4.47 ms</td>
+        <td align="center">105.07 µs</td>
+        <td align="center">2.68 ms</td>
       </tr>
     <th>BLS48-287</th>
-        <td align="center">33.82 ms</td>
-        <td align="center">6.03 ms</td>
-        <td align="center">27.78 ms</td>
-        <td align="center">204.79 µs</td>
-        <td align="center">18.12 ms</td>
-        <td align="center">519.22 µs</td>
-        <td align="center">10.35 ms</td>
+        <td align="center">13.7 ms</td>
+        <td align="center">1.95 ms</td>
+        <td align="center">11.74 ms</td>
+        <td align="center">74.02 µs</td>
+        <td align="center">6.46 ms</td>
+        <td align="center">112.3 µs</td>
+        <td align="center">3.20 ms</td>
       </tr>
     <th>BLS48-571</th>
-        <td align="center">33.82 ms</td>
-        <td align="center">6.03 ms</td>
-        <td align="center">27.78 ms</td>
-        <td align="center">204.79 µs</td>
-        <td align="center">18.12 ms</td>
-        <td align="center">519.22 µs</td>
-        <td align="center">10.35 ms</td>
+        <td align="center">51.11 ms</td>
+        <td align="center">8.70 ms</td>
+        <td align="center">42.3 ms</td>
+        <td align="center">219.6 µs</td>
+        <td align="center">25.0 ms</td>
+        <td align="center">516.5 µs</td>
+        <td align="center">14.25 ms</td>
       </tr>
     <th>BLS48-573</th>
-        <td align="center">33.82 ms</td>
-        <td align="center">6.03 ms</td>
-        <td align="center">27.78 ms</td>
-        <td align="center">204.79 µs</td>
-        <td align="center">18.12 ms</td>
-        <td align="center">519.22 µs</td>
-        <td align="center">10.35 ms</td>
+        <td align="center">39.11 ms</td>
+        <td align="center">6.71 ms</td>
+        <td align="center">32.39 ms</td>
+        <td align="center">227.3 µs</td>
+        <td align="center">17.93 ms</td>
+        <td align="center">516.9 µs</td>
+        <td align="center">11.17 ms</td>
       </tr>
     <th>BLS48-575</th>
-      <td align="center">33.82 ms</td>
-      <td align="center">6.03 ms</td>
-      <td align="center">27.78 ms</td>
-      <td align="center">204.79 µs</td>
-      <td align="center">18.12 ms</td>
-      <td align="center">519.22 µs</td>
-      <td align="center">10.35 ms</td>
+      <td align="center">36.24 ms</td>
+      <td align="center">6.40 ms</td>
+      <td align="center">29.81 ms</td>
+      <td align="center">327.83 µs</td>
+      <td align="center">17.6 ms</td>
+      <td align="center">494.3 µs</td>
+      <td align="center">10.96 ms</td>
     </tr>
     <th>BLS48-581</th>
-        <td align="center">33.82 ms</td>
-        <td align="center">6.03 ms</td>
-        <td align="center">27.78 ms</td>
-        <td align="center">204.79 µs</td>
-        <td align="center">18.12 ms</td>
-        <td align="center">519.22 µs</td>
-        <td align="center">10.35 ms</td>
+        <td align="center">45.64 ms</td>
+        <td align="center">7.89 ms</td>
+        <td align="center">37.7 ms</td>
+        <td align="center">410.37 µs</td>
+        <td align="center">19.07 ms</td>
+        <td align="center">615.01 µs</td>
+        <td align="center">13.14 ms</td>
       </tr>
   </tbody>
 </table>
@@ -471,28 +628,28 @@ The implemented curves provide conversion routines to several representation for
 
 ### 1. BLS Signature scheme [[13]](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
 
-The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`, and follows these steps:
+The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: $G_1$ × $G_2$ → GT`, where `$G_1$`, `$G_2$`, and `GT` are groups of the same prime order `r`, and follows these steps:
 
 1. **Setup**:
-    - Select an elliptic curve `E` and define the groups `G1`, `G2`, and `GT` of order `p`, admitting a bilinear pairing `e: G1 × G2 → GT`.
-    - Choose a generator `g ∈ G2`.
+    - Select an elliptic curve `E` and define the groups `$G_1$`, `$G_2$`, and `GT` of order `p`, admitting a bilinear pairing `e: $G_1$ × $G_2$ → GT`.
+    - Choose a generator `g ∈ $G_2$`.
 
 2. **Key Generation**:
     - **Private Key (sk)**: Randomly select a private key `x ∈ Fr`.
-    - **Public Key (pk)**: Compute the public key `pk = x * g ∈ G2`.
+    - **Public Key (pk)**: Compute the public key `pk = x * g ∈ $G_2$`.
 
 3. **Signing**:
-    - Compute `H(m)`, the hash of the message `m` to a point in `G1`.
-    - Compute the signature `σ = x * H(m) ∈ G1`.
+    - Compute `H(m)`, the hash of the message `m` to a point in `$G_1$`.
+    - Compute the signature `σ = x * H(m) ∈ $G_1$`.
 
 4. **Verification**:
-    - Compute `H(m) ∈ G1` in the same way as above.
+    - Compute `H(m) ∈ $G_1$` in the same way as above.
     - Verify `e(σ, g) = e(H(m), pk)`.
 
 The following code snippets illustrate how such a scheme can easily be implemented using the present library.
 
 ```rust
-use pairings::{Bls12Curves, PairingsEngine};
+use pairings::{BLS12Curves, PairingsEngine};
 
 fn main() {    
     // Hashing to elliptic curves support two modes :  
@@ -502,23 +659,23 @@ fn main() {
 
     // Key-paire genration :
     let sk = engine.fr.random_element();
-    let pk = sk * engine.g2.default_generator();
+    let pk = sk * engine.$G_2$.default_generator();
     println!(" Secrete key (base64) = {}", sk.to_base64());
     println!(" Public Key  (base64) = {}", pk.encode_to_base64());       
 
     // BLS Signing : 
     let message = "This is a simple message to be signed. A message can be any arbitrary length string ....";
-    let hashed_message = engine.g1.hash_to_field(&message, 0);
+    let hashed_message = engine.$G_1$.hash_to_field(&message, 0);
     let signature = sk * hashed_message;
     println!(" Signatue is (base64): {}", signature.encode_to_base64());
 
     // BLS Verification :
-    let hashed_message = engine.g1.hash_to_field(&message, 0);
-    let verification_result = engine.paire(&signature, &engine.g2.default_generator()) == engine.paire(&hashed_message, &pk);
+    let hashed_message = engine.$G_1$.hash_to_field(&message, 0);
+    let verification_result = engine.paire(&signature, &engine.$G_2$.default_generator()) == engine.paire(&hashed_message, &pk);
     println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});
 
     // Faster way to verify using multi-pairings
-    let verification_result = engine.multi_paire(&[signature,hashed_message], &[-engine.g2.default_generator(),pk]) == engine.gt.one();
+    let verification_result = engine.multi_paire(&[signature,hashed_message], &[-engine.$G_2$.default_generator(),pk]) == engine.gt.one();
     println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});       
 }
 ```
@@ -528,7 +685,7 @@ PS C:\pairings-rust> cargo run
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.78s
      Running `target\debug\pairings-rust.exe`
  Secrete key (base64) = D2byDX9BZ9oGoPrmLrZL6rQQnOR28f7ud8j3FkDzn5O25I1wx8qi
- Public Key  (base64) = p2jFDR75AwFg70jol1BT7v8r+PeEPy5ueGM53fdrFWyM34ipzZffmbf6x/jzALdGmewAPFVinG2URQuHxFuzZcGJVzxkuWB8kfm/Axs8kkHZUGEUNAfGiUp12NK8TUANYN2C9wiQl3gv/jhhuoZSvdWBI2g=
+ Public Key  (base64) = p2jFDR75AwFg70jol1BT7v8r+PeEPy5ueGM53fdrFWyM34ipzZffmbf6x/jzALdGmewAPFVin$G_2$URQuHxFuzZcGJVzxkuWB8kfm/Axs8kkHZUGEUNAfGiUp12NK8TUANYN2C9wiQl3gv/jhhuoZSvdWBI2g=
  Signatue is (base64): rOgxEY8EdlN1Kw/9N3lAH77SqckVVQ1CBG32ur09I2TAeFLh5CB7lpXcJgBzw/cuT8tea5adggID7w==
 Verification result : correct
 Verification result (using multi-pairings) : correct
@@ -536,28 +693,28 @@ PS C:\pairings-rust>
 ```
 ### 1. Identity-based encryption scheme [[14]](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
 
-The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
+The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: $G_1$ × $G_2$ → GT`, where `$G_1$`, `$G_2$`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
 
 1. **Setup: System Initialization**:
-   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.g1`.
+   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.$G_1$`.
    - The master public key is `MPk`.
    - The master secret key is `s`.
 
 2. **Key Generation :Private Key Generation for User**:
-   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_G1(ID) ∈ G1`.
-   - The PKG computes the private key for `ID` as `dID = s.QID ∈ G1`.
+   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_$G_1$(ID) ∈ $G_1$`.
+   - The PKG computes the private key for `ID` as `dID = s.QID ∈ $G_1$`.
 
 3. **Encrypting a Message**:
     When a sender wishes to send a message `M` to a user with identity `ID`, he performs the following :
-   - The sender computes `QID = Hash_to_G1(ID)`.
+   - The sender computes `QID = Hash_to_$G_1$(ID)`.
    - The sender selects a random `a ∈Fr' and computes:
-     - Ciphertext component `C1 = r.g2 ∈ G2`.
+     - Ciphertext component `C1 = r.$G_2$ ∈ $G_2$`.
      - Ciphertext component  `C2 = M ⊕ HDK(e(QID, MPk)^r)`, when HDK is a secure key derivation function.
    - The ciphertext is `C = (C1, C2)`.
 
 4. **Decrypting the Ciphertext**:
    - The recipient uses their private key `dID` to compute:
-     - `e(dID, C1) = e(s.QID, a.g2) = e(QID, g2)^(s.ar) = e(QID, MPk)^r`.
+     - `e(dID, C1) = e(s.QID, a.$G_2$) = e(QID, $G_2$)^(s.ar) = e(QID, MPk)^r`.
    - The recipient then computes the message `M` as:
      - `M = C2 ⊕ HDK(e(dID, C1))`.
 
@@ -566,24 +723,24 @@ This process ensures secure communication based on the hardness of the bilinear 
 The following is a code snippet of the Boneh-Franklin IBE's implementation using the implemented library. However, it's essential to note that the following code is just a proof of concept and requires further adjustments if a concrete real application is targeted (including especially IND-CCA updates to the scheme...).
 ```rust
 use base64::{engine::general_purpose, Engine};
-use pairings::{Bls12Curves, PairingsEngine};
+use pairings::{BLS12Curves, PairingsEngine};
 
 fn main() {
     let engine = pairings::BLS12::_461();
     // Generation of Master Keys (Setup):
     let msk =  engine.fr.random_element();
-    let mpk = msk * engine.g2.default_generator();
+    let mpk = msk * engine.$G_2$.default_generator();
     println!("The Master secrete key : {} ",msk.to_base64());
     println!("The Master public key : {} \n",mpk.encode_to_base64());
 
     // Key extraction : generation of the user's secrete key for corresponding Identity :
     let user_identity ="ID-1";    
-    let id_sk = msk * engine.g1.hash_to_field(&user_identity, 0);
+    let id_sk = msk * engine.$G_1$.hash_to_field(&user_identity, 0);
     println!("User's secrete key for identity '{}' : {} \n",user_identity,id_sk.encode_to_base64()); 
     
     // Key confirmation : user can confirm the authenticity and corectness of the secrete key like follows: 
-    let valide_secrete_key = engine.paire(&id_sk, &engine.g2.default_generator()) 
-                                   == engine.paire(&engine.g1.hash_to_field(&user_identity, 0), &mpk);
+    let valide_secrete_key = engine.paire(&id_sk, &engine.$G_2$.default_generator()) 
+                                   == engine.paire(&engine.$G_1$.hash_to_field(&user_identity, 0), &mpk);
     println!("User's secrete key confirmation : {} ",if valide_secrete_key {"Valid key\n"} else {"Invalid key\n"}); 
 
     //  Encryption of a message to the user using its Identity :
@@ -591,8 +748,8 @@ fn main() {
     println!("Plaintext message : {}\n",message);
     let message_as_bytes: Vec<u8> = message.as_bytes().to_vec();
     let a = engine.fr.random_element();
-    let u = a * engine.g2.default_generator();
-    let key_stream = engine.paire(&engine.g1.hash_to_field(&user_identity, 0),&mpk)
+    let u = a * engine.$G_2$.default_generator();
+    let key_stream = engine.paire(&engine.$G_1$.hash_to_field(&user_identity, 0),&mpk)
                               .pow(&a).derive_hkdf(8*message_as_bytes.len(), None);
     let encrypted_data: Vec<u8> = key_stream.iter().zip(message_as_bytes.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
     let encrypted_message =[u.encode_to_base64(),general_purpose::STANDARD.encode(encrypted_data)];
@@ -600,7 +757,7 @@ fn main() {
 
     // Decryption of the message using the user's secrete key 
     let decoded_encryption = general_purpose::STANDARD.decode(&encrypted_message[1]).unwrap();
-    let u = engine.g2.from_base64(&encrypted_message[0]);
+    let u = engine.$G_2$.from_base64(&encrypted_message[0]);
     let key_stream = engine.paire(&id_sk, &u).derive_hkdf(8*decoded_encryption.len(), None); 
     let decrypted_message : Vec<u8> = key_stream.iter().zip(decoded_encryption.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
     println!("Decrypted message : {}",std::str::from_utf8(&decrypted_message).unwrap());
@@ -652,7 +809,7 @@ UDL-University.
 
 [4] . [Simplified Shallue-van de Woestijne-Ulas Method](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-05#section-6.6.3)
 
-[5] . [Efficient hash maps to G2 on BLS curves](https://eprint.iacr.org/2013/458.pdf) 
+[5] . [Efficient hash maps to $G_2$ on BLS curves](https://eprint.iacr.org/2013/458.pdf) 
 
 [6] . [Exponentiating in Pairing Groups](https://ia.cr/2017/419)
 
@@ -664,7 +821,7 @@ UDL-University.
 
 [10] . [Faster big-integer modular multiplication for most moduli](https://hackmd.io/@gnark/modular_multiplication#fn1)
   
-[11] . [Jacobian coordinates for short Weierstrass curves](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#addition-madd-2007-bl).
+[11] . [Jacobian coordinates for short Weierstrass curves](https://www.hyperelliptic.org/EFD/$G_1$p/auto-shortw-jacobian.html#addition-madd-2007-bl).
 
 [12] . [Indifferentiable hashing to ordinary elliptic F q-curves of j= 0 with the cost of one exponentiation in Fq.](https://link.springer.com/article/10.1007/s10623-022-01012-8) 
 
