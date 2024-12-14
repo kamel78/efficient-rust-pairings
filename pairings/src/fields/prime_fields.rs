@@ -13,6 +13,7 @@ use crate::tools::arithmetic_interface::ArithmeticOperations;
 use crate::tools::hashs::*; 
 use super::super::tools::exponent::Exponent;
 use super::arithmetic;
+use rand::rngs::OsRng;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Endianness {
@@ -60,9 +61,9 @@ impl <'a, const N:usize> PrimeField<N> {
         }   
 
     pub fn random_element(&self) -> FieldElement<N> 
-        {   use rand::Rng;
-            let mut rng = rand::thread_rng();
-            let random_bytes: Vec<u8> = (0..N*8).map(|_| rng.gen()).collect();
+        {   let mut rng = OsRng;
+            let mut random_bytes = vec![0u8; N * 8]; 
+            rng.fill_bytes(&mut random_bytes);
             let randomelement  = BigUint::from_bytes_be(&random_bytes); 
             Self::from_bigint(&self,&((randomelement % self.modulo_as_bigint.clone()).to_bigint()).unwrap())
         }
