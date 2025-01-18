@@ -439,8 +439,8 @@ use pairings::{BLS12Curves, PairingsEngine};
 
 fn main() {
     let engine = pairings::BLS12::_381();
-    let p = engine.$G_1$.hash_to_field("identity 1", 0);
-    let q = engine.$G_2$.hash_to_field("identity 2", 0);
+    let p = engine.g1.hash_to_field("identity 1", 0);
+    let q = engine.g2.hash_to_field("identity 2", 0);
     let a = engine.fr.random_element();
     let b = engine.fr.random_element();
     let e1 = engine.paire(&(a*p), &(b*q));
@@ -659,23 +659,23 @@ fn main() {
 
     // Key-paire genration :
     let sk = engine.fr.random_element();
-    let pk = sk * engine.$G_2$.default_generator();
+    let pk = sk * engine.g2.default_generator();
     println!(" Secrete key (base64) = {}", sk.to_base64());
     println!(" Public Key  (base64) = {}", pk.encode_to_base64());       
 
     // BLS Signing : 
     let message = "This is a simple message to be signed. A message can be any arbitrary length string ....";
-    let hashed_message = engine.$G_1$.hash_to_field(&message, 0);
+    let hashed_message = engine.g1.hash_to_field(&message, 0);
     let signature = sk * hashed_message;
     println!(" Signatue is (base64): {}", signature.encode_to_base64());
 
     // BLS Verification :
-    let hashed_message = engine.$G_1$.hash_to_field(&message, 0);
-    let verification_result = engine.paire(&signature, &engine.$G_2$.default_generator()) == engine.paire(&hashed_message, &pk);
+    let hashed_message = engine.g1.hash_to_field(&message, 0);
+    let verification_result = engine.paire(&signature, &engine.g2.default_generator()) == engine.paire(&hashed_message, &pk);
     println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});
 
     // Faster way to verify using multi-pairings
-    let verification_result = engine.multi_paire(&[signature,hashed_message], &[-engine.$G_2$.default_generator(),pk]) == engine.gt.one();
+    let verification_result = engine.multi_paire(&[signature,hashed_message], &[-engine.g2.default_generator(),pk]) == engine.gt.one();
     println!("Verification result : {}",if verification_result {"correct"} else {"incorrect"});       
 }
 ```
@@ -696,25 +696,25 @@ PS C:\pairings-rust>
 The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: $G_1$ × $G_2$ → GT`, where `$G_1$`, `$G_2$`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
 
 1. **Setup: System Initialization**:
-   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.$G_1$`.
+   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.g1`.
    - The master public key is `MPk`.
    - The master secret key is `s`.
 
 2. **Key Generation :Private Key Generation for User**:
-   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_$G_1$(ID) ∈ $G_1$`.
-   - The PKG computes the private key for `ID` as `dID = s.QID ∈ $G_1$`.
+   - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_g1(ID) ∈ G1`.
+   - The PKG computes the private key for `ID` as `dID = s.QID ∈ G1`.
 
 3. **Encrypting a Message**:
     When a sender wishes to send a message `M` to a user with identity `ID`, he performs the following :
-   - The sender computes `QID = Hash_to_$G_1$(ID)`.
+   - The sender computes `QID = Hash_to_G1(ID)`.
    - The sender selects a random `a ∈Fr' and computes:
-     - Ciphertext component `C1 = r.$G_2$ ∈ $G_2$`.
+     - Ciphertext component `C1 = r.g2 ∈ G2`.
      - Ciphertext component  `C2 = M ⊕ HDK(e(QID, MPk)^r)`, when HDK is a secure key derivation function.
    - The ciphertext is `C = (C1, C2)`.
 
 4. **Decrypting the Ciphertext**:
    - The recipient uses their private key `dID` to compute:
-     - `e(dID, C1) = e(s.QID, a.$G_2$) = e(QID, $G_2$)^(s.ar) = e(QID, MPk)^r`.
+     - `e(dID, C1) = e(s.QID, a.G2) = e(QID, G2)^(s.ar) = e(QID, MPk)^r`.
    - The recipient then computes the message `M` as:
      - `M = C2 ⊕ HDK(e(dID, C1))`.
 
@@ -729,18 +729,18 @@ fn main() {
     let engine = pairings::BLS12::_461();
     // Generation of Master Keys (Setup):
     let msk =  engine.fr.random_element();
-    let mpk = msk * engine.$G_2$.default_generator();
+    let mpk = msk * engine.g2.default_generator();
     println!("The Master secrete key : {} ",msk.to_base64());
     println!("The Master public key : {} \n",mpk.encode_to_base64());
 
     // Key extraction : generation of the user's secrete key for corresponding Identity :
     let user_identity ="ID-1";    
-    let id_sk = msk * engine.$G_1$.hash_to_field(&user_identity, 0);
+    let id_sk = msk * engine.g1.hash_to_field(&user_identity, 0);
     println!("User's secrete key for identity '{}' : {} \n",user_identity,id_sk.encode_to_base64()); 
     
     // Key confirmation : user can confirm the authenticity and corectness of the secrete key like follows: 
-    let valide_secrete_key = engine.paire(&id_sk, &engine.$G_2$.default_generator()) 
-                                   == engine.paire(&engine.$G_1$.hash_to_field(&user_identity, 0), &mpk);
+    let valide_secrete_key = engine.paire(&id_sk, &engine.g2.default_generator()) 
+                                   == engine.paire(&engine.g1.hash_to_field(&user_identity, 0), &mpk);
     println!("User's secrete key confirmation : {} ",if valide_secrete_key {"Valid key\n"} else {"Invalid key\n"}); 
 
     //  Encryption of a message to the user using its Identity :
@@ -748,8 +748,8 @@ fn main() {
     println!("Plaintext message : {}\n",message);
     let message_as_bytes: Vec<u8> = message.as_bytes().to_vec();
     let a = engine.fr.random_element();
-    let u = a * engine.$G_2$.default_generator();
-    let key_stream = engine.paire(&engine.$G_1$.hash_to_field(&user_identity, 0),&mpk)
+    let u = a * engine.g2.default_generator();
+    let key_stream = engine.paire(&engine.g1.hash_to_field(&user_identity, 0),&mpk)
                               .pow(&a).derive_hkdf(8*message_as_bytes.len(), None);
     let encrypted_data: Vec<u8> = key_stream.iter().zip(message_as_bytes.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
     let encrypted_message =[u.encode_to_base64(),general_purpose::STANDARD.encode(encrypted_data)];
@@ -757,7 +757,7 @@ fn main() {
 
     // Decryption of the message using the user's secrete key 
     let decoded_encryption = general_purpose::STANDARD.decode(&encrypted_message[1]).unwrap();
-    let u = engine.$G_2$.from_base64(&encrypted_message[0]);
+    let u = engine.g2.from_base64(&encrypted_message[0]);
     let key_stream = engine.paire(&id_sk, &u).derive_hkdf(8*decoded_encryption.len(), None); 
     let decrypted_message : Vec<u8> = key_stream.iter().zip(decoded_encryption.iter()).map(|(&x1, &x2)| x1 ^ x2).collect();    
     println!("Decrypted message : {}",std::str::from_utf8(&decrypted_message).unwrap());
