@@ -76,7 +76,7 @@ Some security related parameters of the implemented curves are listed in the fol
     </tr>
     <th>BLS24-477</th>
        <td align="center">24</td>
-        <td align="center">477ms</td>
+        <td align="center">477</td>
         <td align="center">383</td>
         <td align="center">1908</td>
         <td align="center">11448</td>
