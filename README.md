@@ -378,13 +378,13 @@ The curve on GF(p) is defined by `y² = x³ + b`, and the twist curve on GF(p⁸
 - **$G_1$ cofactor h1** = `0xFE5B`
 - **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 3 / 13
 
-#### Parameters of the BLS48-277 (Construction 3 / 3-Type):
+#### Parameters of the BLS48-277 (Construction 3 / D-Type):
 
 - **x** = `-0xadc0`
 - **p** = `0x14674E388DA524ED849C38E2B187AF9D0AB5A06A924839098277FD01150000274ECB6B`
 - **r** = `0x84DF8C1C76BB2FAD35B6493401B99C1FCB04C29E9A9613CEBF000000000001`
 - **b** = `2`
-- **btw** = `2/*w`
+- **btw** = `2/w`
 - **$G_1$ cofactor h1** = `0xADC1`
 - **$G_1$/ $G_2$ Isogeny degree** (for SWU mapping) = 7 / 3
 
