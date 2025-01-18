@@ -628,22 +628,22 @@ The implemented curves provide conversion routines to several representation for
 
 ### 1. BLS Signature scheme [[13]](https://link.springer.com/chapter/10.1007/3-540-45682-1_30)
 
-The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: $G_1$ × $G_2$ → GT`, where `$G_1$`, `$G_2$`, and `GT` are groups of the same prime order `r`, and follows these steps:
+The BLS (Boneh-Lynn-Shacham) signature scheme is a cryptographic algorithm using pairing-based cryptography on elliptic curves. It utilizes a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`, and follows these steps:
 
 1. **Setup**:
-    - Select an elliptic curve `E` and define the groups `$G_1$`, `$G_2$`, and `GT` of order `p`, admitting a bilinear pairing `e: $G_1$ × $G_2$ → GT`.
-    - Choose a generator `g ∈ $G_2$`.
+    - Select an elliptic curve `E` and define the groups `G1`, `G2`, and `GT` of order `p`, admitting a bilinear pairing `e: G1 × G2 → GT`.
+    - Choose a generator `g ∈ G2`.
 
 2. **Key Generation**:
     - **Private Key (sk)**: Randomly select a private key `x ∈ Fr`.
-    - **Public Key (pk)**: Compute the public key `pk = x * g ∈ $G_2$`.
+    - **Public Key (pk)**: Compute the public key `pk = x * g ∈ G2`.
 
 3. **Signing**:
-    - Compute `H(m)`, the hash of the message `m` to a point in `$G_1$`.
-    - Compute the signature `σ = x * H(m) ∈ $G_1$`.
+    - Compute `H(m)`, the hash of the message `m` to a point in `G1`.
+    - Compute the signature `σ = x * H(m) ∈ G1`.
 
 4. **Verification**:
-    - Compute `H(m) ∈ $G_1$` in the same way as above.
+    - Compute `H(m) ∈ G1` in the same way as above.
     - Verify `e(σ, g) = e(H(m), pk)`.
 
 The following code snippets illustrate how such a scheme can easily be implemented using the present library.
@@ -693,28 +693,28 @@ PS C:\pairings-rust>
 ```
 ### 1. Identity-based encryption scheme [[14]](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf)
 
-The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: $G_1$ × $G_2$ → GT`, where `$G_1$`, `$G_2$`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
+The Boneh-Franklin IBE scheme is historicaly the first proposed IBE schemes, and is still widely used. We consider a bilinear pairing `e: G1 × G2 → GT`, where `G1`, `G2`, and `GT` are groups of the same prime order `r`. One of the vriants of this scheme the following mathematical steps based on elliptic curve pairings :
 
 1. **Setup: System Initialization**:
-   - The PKG selects a random master secret `s` in `Fr` and computes `MPk = s.g1`.
+   - The PKG selects a random master secret `s` in `Fr` and computes `MPk =  s * g2 `.
    - The master public key is `MPk`.
    - The master secret key is `s`.
 
 2. **Key Generation :Private Key Generation for User**:
    - User's identity `ID` (e.g., email address) is hashed to a point on the elliptic curve using a cryptographic hash function : `QID = Hash_to_g1(ID) ∈ G1`.
-   - The PKG computes the private key for `ID` as `dID = s.QID ∈ G1`.
+   - The PKG computes the private key for `ID` as `dID = s*QID ∈ G1`.
 
 3. **Encrypting a Message**:
     When a sender wishes to send a message `M` to a user with identity `ID`, he performs the following :
    - The sender computes `QID = Hash_to_G1(ID)`.
-   - The sender selects a random `a ∈Fr' and computes:
-     - Ciphertext component `C1 = r.g2 ∈ G2`.
-     - Ciphertext component  `C2 = M ⊕ HDK(e(QID, MPk)^r)`, when HDK is a secure key derivation function.
+   - The sender selects a random `a ∈ Fr' and computes:
+     - Ciphertext component `C1 = a * g2 ∈ G2`.
+     - Ciphertext component  `C2 = M ⊕ HDK(e(QID, MPk)^a)`, when HDK is a secure key derivation function.
    - The ciphertext is `C = (C1, C2)`.
 
 4. **Decrypting the Ciphertext**:
    - The recipient uses their private key `dID` to compute:
-     - `e(dID, C1) = e(s.QID, a.G2) = e(QID, G2)^(s.ar) = e(QID, MPk)^r`.
+     - `e(dID, C1) = e(s.QID, a*g2) = e(QID, g2)^(s.a) = e(QID, MPk)^a`.
    - The recipient then computes the message `M` as:
      - `M = C2 ⊕ HDK(e(dID, C1))`.
 
