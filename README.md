@@ -57,15 +57,6 @@ Some security related parameters of the implemented curves are listed in the fol
       <td align="center">5532</td>
       <td align="center">128</td>
     </tr>
-    <tr>
-      <th>BLS24-479</th>
-      <td align="center">24</td>
-      <td align="center">476</td>
-      <td align="center">384 </td>
-      <td align="center">1904</td>
-      <td align="center">11424</td>
-      <td align="center">192</td>
-    </tr>
     <th>BLS24-315</th>
       <td align="center">24</td>
       <td align="center">315</td>
