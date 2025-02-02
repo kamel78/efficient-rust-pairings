@@ -9,6 +9,7 @@ use base64::engine::general_purpose;
 use base64::Engine;
 use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
 use num_traits::{ Euclid, Num, One, ToPrimitive, Zero};
+use rand::RngCore;
 use crate::tools::arithmetic_interface::ArithmeticOperations;
 use crate::tools::hashs::*; 
 use super::super::tools::exponent::Exponent;
