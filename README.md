@@ -490,16 +490,6 @@ The following table illustrates the obtained performances and runtime results fo
       <td align="center">262.08 µs</td>
       <td align="center">652.37 µs</td>
     </tr>
-    <tr>
-      <th>BLS24-479</th>
-      <td align="center">9.1 ms</td>
-      <td align="center">2.63 ms</td>
-      <td align="center">6.51 ms</td>
-      <td align="center">292.9 µs</td>
-      <td align="center">5.28 ms</td>
-      <td align="center">596.3 µs</td>
-      <td align="center">2.36 ms</td>
-    </tr>
     <th>BLS24-315</th>
       <td align="center">4.16 ms</td>
       <td align="center">1.11 ms</td>
