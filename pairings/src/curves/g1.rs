@@ -168,7 +168,7 @@ impl <const R:usize,const N:usize,const MAX_COEFS_COUNT:usize> G1Element<R,N,MAX
                 p.to_affine();
                 let c_bit: u8 = 1;
                 let i_bit: u8 = if self.point.z.is_zero() {1} else {0};
-                let s_bit: i8 = if self.point.z.is_zero() {0} else {if self.point.y.sign()==1 {1} else {0}};                
+                let s_bit: i8 = if self.point.z.is_zero() {0} else {if p.y.sign()==1 {1} else {0}};
                 let m_byte: u8 = (c_bit << 7) | (i_bit << 6) | (((s_bit + 1) as u8 >> 1) << 5);
                 let numbits = self.point.x.fieldparams.num_of_bits;                
                 let sizeinbytes = (numbits >> 3) + if (numbits % 8) ==0 {0} else {1};
