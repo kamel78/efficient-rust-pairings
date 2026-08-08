@@ -232,6 +232,18 @@ impl <const N:usize, const PARAMSIZE:usize>  GTElement<N,PARAMSIZE>{
                                                                                     else {x.cyclotomic_power(e, false, &None).into()}},                                                                                                                                                                        
                              }
                 }
+    
+    // Cycloomic power is used for the final exponentiation in pairing computation. It is faster than the normal exponentiation.
+    // if the element is not in the cyclotomic subgroup, this may generate an error.(introduced just for efficiency)
+    pub fn cyclotomic_power(&self,e : & dyn Exponent<N>) -> Self {
+                match  self  {   GTElement::Fp12_1(x) => {x.cyclotomic_power(e, false, &None).into()},
+                                 GTElement::Fp24_1(x) => {x.cyclotomic_power(e, false, &None).into()},
+                                 GTElement::Fp48_1(x) => {x.cyclotomic_power(e, false, &None).into()},
+                                 GTElement::Fp24_2(x) => {x.cyclotomic_power(e, false, &None).into()},
+                                 GTElement::Fp48_2(x) => {x.cyclotomic_power(e, false, &None).into()},                                                                                    
+                                 GTElement::Fp48_3(x) => {x.cyclotomic_power(e, false, &None).into()},                                                                                                                                                                        
+                             }
+                }
     pub fn sparse_multiply(&self,rhs : &[&[FieldElement<N>];3],twist_type:char) -> Self {
                 match  self  {   GTElement::Fp12_1(x) => x.sparse_multiply(rhs).into(),
                                  GTElement::Fp24_1(x) => x.sparse_multiply(rhs,twist_type).into(),
