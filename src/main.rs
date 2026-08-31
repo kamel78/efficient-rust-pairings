@@ -91,9 +91,9 @@ fn run_chosen_action<const R:usize,const N:usize,const MAX_COEFS_COUNT1:usize,co
     1 => {println!("Runtime Bench-marking\n");
           check_and_benchmark(engine)  },
     2 => {println!("BLS Signature demonstration :\n");
-          bls_signature_scheme(BLS12::_381())  },
+          bls_signature_scheme(engine)  },
     3 => {println!("Boneh-Franklin IBE demonstration :\n");
-          boneh_franklin_ibe(BLS12::_461())   },
+          boneh_franklin_ibe(engine)   },
     4 =>{println!("Exiting the program. Goodbye!");            
         },
     _ => println!("Invalid choice. Please enter 1, 2, or 3."),
@@ -119,57 +119,42 @@ fn main() {
         }
     };
     if choice1 == 4 {break;}
+
+    let curve_choices: [(&str, &str, usize, Box<dyn Fn()>); 15] = [
+      ("1",  "BLS12-381", 128, Box::new(|| run_chosen_action(BLS12::_381(), choice1))),
+      ("2",  "BLS12-446", 128, Box::new(|| run_chosen_action(BLS12::_446(), choice1))),
+      ("3",  "BLS12-461", 128, Box::new(|| run_chosen_action(BLS12::_461(), choice1))),
+      ("4",  "BLS24-315", 128, Box::new(|| run_chosen_action(BLS24::_315(), choice1))),
+      ("5",  "BLS24-477", 192, Box::new(|| run_chosen_action(BLS24::_477(), choice1))),
+      ("6",  "BLS24-479", 192, Box::new(|| run_chosen_action(BLS24::_479(), choice1))),
+      ("7",  "BLS24-509", 192, Box::new(|| run_chosen_action(BLS24::_509(), choice1))),
+      ("8",  "BLS24-509-SNARK", 192, Box::new(|| run_chosen_action(BLS24::_509_snark(), choice1))),
+      ("9",  "BLS24-559", 192, Box::new(|| run_chosen_action(BLS24::_559(), choice1))),
+      ("10", "BLS48-277", 128, Box::new(|| run_chosen_action(BLS48::_277(), choice1))),
+      ("11", "BLS48-287", 128, Box::new(|| run_chosen_action(BLS48::_287(), choice1))),
+      ("12", "BLS48-571", 256, Box::new(|| run_chosen_action(BLS48::_571(), choice1))),
+      ("13", "BLS48-573", 256, Box::new(|| run_chosen_action(BLS48::_573(), choice1))),
+      ("14", "BLS48-575", 256, Box::new(|| run_chosen_action(BLS48::_575(), choice1))),
+      ("15", "BLS48-581", 256, Box::new(|| run_chosen_action(BLS48::_581(), choice1))),
+    ];
     println!(" Choose one of the following implemented curves :");
-    println!(" --------------------------------------------------");
-    println!("(1)- BLS12-381 (Security :128bit).");
-    println!("(2)- BLS12-446 (Security :128bit).");
-    println!("(3)- BLS12-461 (Security :128bit).");
-    println!(" --------------------------------------------------");
-    println!("(4)- BLS24-315 (Security :128bit).");
-    println!("(5)- BLS24-477 (Security :192bit).");
-    println!("(6)- BLS24-479 (Security :192bit).");
-    println!("(7)- BLS24-509 (Security :192bit).");
-    println!("(8)- BLS24-509-SNARK (Security :192bit).");
-    println!("(9)- BLS24-559 (Security :192bit).");
-    println!(" --------------------------------------------------");
-    println!("(10)- BLS48-277 (Security :128bit).");
-    println!("(11)- BLS48-287 (Security :128bit).");
-    println!("(12)- BLS48-571 (Security :256bit).");
-    println!("(13)- BLS48-573 (Security :256bit).");
-    println!("(14)- BLS48-575 (Security :256bit).");
-    println!("(15)- BLS48-581 (Security :256bit).");
+    for (id, curve_name, security_level, _) in &curve_choices {
+      println!("({id})- {curve_name} (Security :{security_level}bit).");
+    }
     println!("Choose a curve :");
 
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
-    let choice2: u32 = match input.trim().parse() {
-      Ok(num) => num,
-      Err(_) => {
-          println!("Invalid input. Please enter a number.");
-          return;
+    let input = input.trim();
+    for (id, _, _, action) in &curve_choices {
+      if *id == input {
+        action();
+        return;
       }
-  };
-      match  choice2 {
-              1=> run_chosen_action(BLS12::_381(), choice1),
-              2=> run_chosen_action(BLS12::_446(), choice1),
-              3=> run_chosen_action(BLS12::_461(), choice1),
-              4=> run_chosen_action(BLS24::_315(), choice1),
-              5=> run_chosen_action(BLS24::_477(), choice1),
-              6=> run_chosen_action(BLS24::_479(), choice1),
-              7=> run_chosen_action(BLS24::_509(), choice1),
-              8=> run_chosen_action(BLS24::_509_snark(), choice1),
-              9=> run_chosen_action(BLS24::_559(), choice1),
-              10=> run_chosen_action(BLS48::_277(), choice1),
-              11=> run_chosen_action(BLS48::_287(), choice1),
-              12=> run_chosen_action(BLS48::_571(), choice1),
-              13=> run_chosen_action(BLS48::_573(), choice1),
-              14=> run_chosen_action(BLS48::_575(), choice1),
-              15=> run_chosen_action(BLS48::_581(), choice1),
-              _ => println!("Invalid choice. Please enter valid choice."),
-                
-            }  
-}
+    }
 
+    println!("Invalid choice. Please enter valid choice.");
+  }
 }
 
 
